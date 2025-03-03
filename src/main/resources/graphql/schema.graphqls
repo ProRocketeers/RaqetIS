@@ -1,0 +1,561 @@
+"Definice enumů"
+enum AddressType {
+    Home
+    Work
+    Billing
+    Shipping
+}
+
+enum ContactType {
+    Phone
+    Email
+    Other
+    Website
+}
+
+enum ExpertiseLevel {
+    Beginner
+    Intermediate
+    Advanced
+    Expert
+}
+
+enum SeniorityType {
+    Hard
+    Soft
+}
+
+enum SeniorityLevel {
+    Junior
+    Medior
+    Senior
+    Expert
+}
+
+enum BenefitType {
+    Material
+    NonMaterial
+}
+
+enum BenefitPeriod {
+    Daily
+    Monthly
+    Yearly
+}
+
+enum CustomerContractType {
+    Framework
+    Order
+}
+
+enum InternalContractType {
+    Subscription
+    Service
+    Other
+}
+
+enum AssignmentExpertiseType {
+    Used
+    Acquired
+}
+
+enum OperationType {
+    INSERT
+    UPDATE
+    DELETE
+}
+
+"Definice typů entit"
+type Address {
+    addressID: Int!
+    street: String!
+    city: String!
+    state: String!
+    postalCode: String!
+    country: String!
+    latitude: Float!
+    longitude: Float!
+    addressType: AddressType!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type Contact {
+    contactID: Int!
+    contactName: String!
+    contactType: ContactType!
+    contactValue: String!
+    isPrimary: Boolean!
+    createdAt: String!
+    updatedAt: String!
+}
+
+type Company {
+    companyID: Int!
+    companyName: String!
+    registrationNumber: String
+    taxID: String
+    industry: String
+    addressID: Int
+    createdAt: String!
+    updatedAt: String!
+}
+
+type CompaniesContacts {
+    companyId: Int!
+    contactId: Int!
+    company: Company
+    contact: Contact
+}
+
+type ExpertContacts {
+    expertId: Int!
+    contactId: Int!
+    expert: Expert
+    contact: Contact
+}
+
+type Expertise {
+    expertiseID: Int!
+    name: String!
+    description: String
+    createdAt: String!
+}
+
+type SeniorityLevels {
+    seniorityLevelID: Int!
+    type: SeniorityType!
+    level: SeniorityLevel!
+    createdAt: String!
+}
+
+type Expert {
+    expertID: Int!
+    firstName: String!
+    lastName: String!
+    personalID: String
+    birthDate: String
+    addressID: Int
+    contactID: Int
+    email: String!
+    specialization: String
+    marketHourlyRate: Float!
+    marketDailyRate: Float!
+    educationLevel: String
+    seniorityLevelID: Int!
+    createdAt: String!
+}
+
+type ExpertVehicles {
+    vehicleID: Int!
+    expertID: Int!
+    brand: String!
+    model: String!
+    color: String!
+    licensePlate: String!
+}
+
+type CompanyDevices {
+    deviceID: Int!
+    deviceType: String!
+    name: String
+    serialNumber: String
+    purchasePrice: Float!
+    assignedExpertID: Int
+}
+
+type ExpertExpertise {
+    expertExpertiseID: Int!
+    expertID: Int!
+    expertiseID: Int!
+    level: ExpertiseLevel!
+    acquiredDate: String
+    certificate: String
+}
+
+type ExpertBenefits {
+    benefitID: Int!
+    expertID: Int!
+    benefitName: String!
+    benefitType: BenefitType!
+    period: BenefitPeriod!
+    cost: Float!
+}
+
+type Teams {
+    teamID: Int!
+    teamName: String!
+    teamOfficeId: String
+    teamLeaderID: Int
+    createdAt: String!
+}
+
+type TeamExperts {
+    teamID: Int!
+    expertID: Int!
+    assignedAt: String!
+}
+
+type CompanyCustomerContracts {
+    customerContractID: Int!
+    companyID: Int!
+    contractType: CustomerContractType!
+    startDate: String!
+    endDate: String
+    totalValue: Float!
+    contractURL: String
+    createdAt: String!
+}
+
+type CompanyInternalContracts {
+    internalContractID: Int!
+    companyID: Int!
+    contractName: String!
+    contractType: InternalContractType!
+    startDate: String!
+    endDate: String
+    monthlyCost: Float!
+    contractURL: String
+    createdAt: String!
+}
+
+type ExpertOrders {
+    expertOrderID: Int!
+    customerContractID: Int!
+    expertID: Int!
+    orderDate: String!
+    totalPrice: Float!
+    createdAt: String!
+}
+
+type Pricing {
+    pricingID: Int!
+    companyID: Int
+    expertID: Int
+    teamID: Int
+    offeredPrice: Float!
+    margin: Float!
+    validFrom: String!
+    validTo: String
+    pricingVersion: Int!
+    createdAt: String!
+}
+
+type Assignment {
+    assignmentID: Int!
+    expertID: Int!
+    companyID: Int!
+    startDate: String!
+    endDate: String
+    description: String
+}
+
+type AssignmentExpertise {
+    assignmentExpertiseID: Int!
+    assignmentID: Int!
+    expertiseID: Int!
+    type: AssignmentExpertiseType!
+}
+
+type AuditLogs {
+    auditLogID: Int!
+    tableName: String!
+    operationType: OperationType!
+    recordID: Int!
+    changedAt: String!
+    changedBy: String
+}
+
+"Definice vstupních typů"
+input AddressInput {
+    street: String!
+    city: String!
+    state: String!
+    postalCode: String!
+    country: String!
+    latitude: Float!
+    longitude: Float!
+    addressType: AddressType!
+}
+
+input ContactInput {
+    contactName: String!
+    contactType: ContactType!
+    contactValue: String!
+    isPrimary: Boolean!
+}
+
+input CompanyInput {
+    companyName: String!
+    registrationNumber: String
+    taxID: String
+    industry: String
+    addressID: Int
+}
+
+input CompaniesContactsInput {
+    companyId: Int!
+    contactId: Int!
+}
+
+input ExpertContactsInput {
+    expertId: Int!
+    contactId: Int!
+}
+
+input ExpertiseInput {
+    name: String!
+    description: String
+}
+
+input SeniorityLevelsInput {
+    type: SeniorityType!
+    level: SeniorityLevel!
+}
+
+input ExpertInput {
+    firstName: String!
+    lastName: String!
+    personalID: String
+    birthDate: String
+    addressID: Int
+    contactID: Int
+    email: String!
+    specialization: String
+    marketHourlyRate: Float!
+    marketDailyRate: Float!
+    educationLevel: String
+    seniorityLevelID: Int!
+}
+
+input ExpertVehiclesInput {
+    expertID: Int!
+    brand: String!
+    model: String!
+    color: String!
+    licensePlate: String!
+}
+
+input CompanyDevicesInput {
+    deviceType: String!
+    name: String
+    serialNumber: String
+    purchasePrice: Float!
+    assignedExpertID: Int
+}
+
+input ExpertExpertiseInput {
+    expertID: Int!
+    expertiseID: Int!
+    level: ExpertiseLevel!
+    acquiredDate: String
+    certificate: String
+}
+
+input ExpertBenefitsInput {
+    expertID: Int!
+    benefitName: String!
+    benefitType: BenefitType!
+    period: BenefitPeriod!
+    cost: Float!
+}
+
+input TeamsInput {
+    teamName: String!
+    teamOfficeId: String
+    teamLeaderID: Int
+}
+
+input TeamExpertsInput {
+    teamID: Int!
+    expertID: Int!
+    assignedAt: String
+}
+
+input CompanyCustomerContractsInput {
+    companyID: Int!
+    contractType: CustomerContractType!
+    startDate: String!
+    endDate: String
+    totalValue: Float!
+    contractURL: String
+}
+
+input CompanyInternalContractsInput {
+    companyID: Int!
+    contractName: String!
+    contractType: InternalContractType!
+    startDate: String!
+    endDate: String
+    monthlyCost: Float!
+    contractURL: String
+}
+
+input ExpertOrdersInput {
+    customerContractID: Int!
+    expertID: Int!
+    orderDate: String!
+    totalPrice: Float!
+}
+
+input PricingInput {
+    companyID: Int
+    expertID: Int
+    teamID: Int
+    offeredPrice: Float!
+    margin: Float!
+    validFrom: String!
+    validTo: String
+    pricingVersion: Int
+}
+
+input AssignmentInput {
+    expertID: Int!
+    companyID: Int!
+    startDate: String!
+    endDate: String
+    description: String
+}
+
+input AssignmentExpertiseInput {
+    assignmentID: Int!
+    expertiseID: Int!
+    type: AssignmentExpertiseType!
+}
+
+input AuditLogsInput {
+    tableName: String!
+    operationType: OperationType!
+    recordID: Int!
+    changedAt: String
+    changedBy: String
+}
+
+"Definice kořenových typů dotazů a mutací"
+type Query {
+    addresses: [Address!]!
+    address(id: Int!): Address
+    contacts: [Contact!]!
+    contact(id: Int!): Contact
+    companies: [Company!]!
+    company(id: Int!): Company
+    experts: [Expert!]!
+    expert(id: Int!): Expert
+    companiesContacts: [CompaniesContacts!]!
+    companiesContactsByIds(companyId: Int!, contactId: Int!): CompaniesContacts
+    expertContacts: [ExpertContacts!]!
+    expertContactsByIds(expertId: Int!, contactId: Int!): ExpertContacts
+    expertises: [Expertise!]!
+    expertise(id: Int!): Expertise
+    seniorityLevels: [SeniorityLevels!]!
+    seniorityLevel(id: Int!): SeniorityLevels
+    expertVehicles: [ExpertVehicles!]!
+    expertVehicle(id: Int!): ExpertVehicles
+    companyDevices: [CompanyDevices!]!
+    companyDevice(id: Int!): CompanyDevices
+    expertExpertises: [ExpertExpertise!]!
+    expertExpertise(id: Int!): ExpertExpertise
+    expertBenefits: [ExpertBenefits!]!
+    expertBenefit(id: Int!): ExpertBenefits
+    teams: [Teams!]!
+    team(id: Int!): Teams
+    teamExperts: [TeamExperts!]!
+    teamExpert(teamID: Int!, expertID: Int!): TeamExperts
+    companyCustomerContracts: [CompanyCustomerContracts!]!
+    companyCustomerContract(id: Int!): CompanyCustomerContracts
+    companyInternalContracts: [CompanyInternalContracts!]!
+    companyInternalContract(id: Int!): CompanyInternalContracts
+    expertOrders: [ExpertOrders!]!
+    expertOrder(id: Int!): ExpertOrders
+    pricing: [Pricing!]!
+    price(id: Int!): Pricing
+    assignments: [Assignment!]!
+    assignment(id: Int!): Assignment
+    assignmentExpertises: [AssignmentExpertise!]!
+    assignmentExpertise(id: Int!): AssignmentExpertise
+    auditLogs: [AuditLogs!]!
+    auditLog(id: Int!): AuditLogs
+}
+
+type Mutation {
+    createAddress(input: AddressInput!): Address!
+    updateAddress(id: Int!, input: AddressInput!): Address!
+    deleteAddress(id: Int!): Boolean!
+
+    createContact(input: ContactInput!): Contact!
+    updateContact(id: Int!, input: ContactInput!): Contact!
+    deleteContact(id: Int!): Boolean!
+
+    createCompany(input: CompanyInput!): Company!
+    updateCompany(id: Int!, input: CompanyInput!): Company!
+    deleteCompany(id: Int!): Boolean!
+
+    createExpert(input: ExpertInput!): Expert!
+    updateExpert(id: Int!, input: ExpertInput!): Expert!
+    deleteExpert(id: Int!): Boolean!
+
+    createCompaniesContacts(input: CompaniesContactsInput!): CompaniesContacts!
+    deleteCompaniesContacts(companyId: Int!, contactId: Int!): Boolean!
+
+    createExpertContacts(input: ExpertContactsInput!): ExpertContacts!
+    deleteExpertContacts(expertId: Int!, contactId: Int!): Boolean!
+
+    createExpertise(input: ExpertiseInput!): Expertise!
+    updateExpertise(id: Int!, input: ExpertiseInput!): Expertise!
+    deleteExpertise(id: Int!): Boolean!
+
+    createSeniorityLevels(input: SeniorityLevelsInput!): SeniorityLevels!
+    updateSeniorityLevels(id: Int!, input: SeniorityLevelsInput!): SeniorityLevels!
+    deleteSeniorityLevels(id: Int!): Boolean!
+
+    createExpertVehicles(input: ExpertVehiclesInput!): ExpertVehicles!
+    updateExpertVehicles(id: Int!, input: ExpertVehiclesInput!): ExpertVehicles!
+    deleteExpertVehicles(id: Int!): Boolean!
+
+    createCompanyDevices(input: CompanyDevicesInput!): CompanyDevices!
+    updateCompanyDevices(id: Int!, input: CompanyDevicesInput!): CompanyDevices!
+    deleteCompanyDevices(id: Int!): Boolean!
+
+    createExpertExpertise(input: ExpertExpertiseInput!): ExpertExpertise!
+    updateExpertExpertise(id: Int!, input: ExpertExpertiseInput!): ExpertExpertise!
+    deleteExpertExpertise(id: Int!): Boolean!
+
+    createExpertBenefits(input: ExpertBenefitsInput!): ExpertBenefits!
+    updateExpertBenefits(id: Int!, input: ExpertBenefitsInput!): ExpertBenefits!
+    deleteExpertBenefits(id: Int!): Boolean!
+
+    createTeams(input: TeamsInput!): Teams!
+    updateTeams(id: Int!, input: TeamsInput!): Teams!
+    deleteTeams(id: Int!): Boolean!
+
+    createTeamExperts(input: TeamExpertsInput!): TeamExperts!
+    deleteTeamExperts(teamID: Int!, expertID: Int!): Boolean!
+
+    createCompanyCustomerContracts(input: CompanyCustomerContractsInput!): CompanyCustomerContracts!
+    updateCompanyCustomerContracts(id: Int!, input: CompanyCustomerContractsInput!): CompanyCustomerContracts!
+    deleteCompanyCustomerContracts(id: Int!): Boolean!
+
+    createCompanyInternalContracts(input: CompanyInternalContractsInput!): CompanyInternalContracts!
+    updateCompanyInternalContracts(id: Int!, input: CompanyInternalContractsInput!): CompanyInternalContracts!
+    deleteCompanyInternalContracts(id: Int!): Boolean!
+
+    createExpertOrders(input: ExpertOrdersInput!): ExpertOrders!
+    updateExpertOrders(id: Int!, input: ExpertOrdersInput!): ExpertOrders!
+    deleteExpertOrders(id: Int!): Boolean!
+
+    createPricing(input: PricingInput!): Pricing!
+    updatePricing(id: Int!, input: PricingInput!): Pricing!
+    deletePricing(id: Int!): Boolean!
+
+    createAssignment(input: AssignmentInput!): Assignment!
+    updateAssignment(id: Int!, input: AssignmentInput!): Assignment!
+    deleteAssignment(id: Int!): Boolean!
+
+    createAssignmentExpertise(input: AssignmentExpertiseInput!): AssignmentExpertise!
+    updateAssignmentExpertise(id: Int!, input: AssignmentExpertiseInput!): AssignmentExpertise!
+    deleteAssignmentExpertise(id: Int!): Boolean!
+
+    createAuditLogs(input: AuditLogsInput!): AuditLogs!
+    updateAuditLogs(id: Int!, input: AuditLogsInput!): AuditLogs!
+    deleteAuditLogs(id: Int!): Boolean!
+}

@@ -1,0 +1,406 @@
+{
+  "info": {
+    "name": "Raqetis Initial Data Setup",
+    "_postman_id": "9e8a33d7-1234-4d56-9f1a-abcdef123456",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Create Address",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createAddress(input: { street: \\\"Main Street\\\", city: \\\"Prague\\\", state: \\\"Prague\\\", postalCode: \\\"11000\\\", country: \\\"Czechia\\\", latitude: 50.087, longitude: 14.421, addressType: Home }) { addressID street } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8443",
+          "path": ["graphql"]
+        }
+      }
+    },
+    {
+      "name": "Create Contact",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createContact(input: { contactName: \\\"John Doe\\\", contactType: Email, contactValue: \\\"john@example.com\\\", isPrimary: true }) { contactID contactName } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8443",
+          "path": ["graphql"]
+        }
+      }
+    },
+    {
+      "name": "Create Company",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createCompany(input: { companyName: \\\"Example Corp\\\", registrationNumber: \\\"12345678\\\", taxID: \\\"CZ12345678\\\", industry: \\\"IT\\\", addressID: 1 }) { companyID companyName } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8443",
+          "path": ["graphql"]
+        }
+      }
+    },
+    {
+      "name": "Create SeniorityLevels",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json", "type": "text" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createSeniorityLevels(input: { type: Hard, level: Senior }) { seniorityLevelID level } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create Expert",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createExpert(input: { firstName: \\\"Alice\\\", lastName: \\\"Smith\\\", personalID: \\\"ABC123\\\", birthDate: \\\"1985-06-15\\\", addressID: 1, contactID: 1, email: \\\"alice@example.com\\\", specialization: \\\"Software Development\\\", marketHourlyRate: 100.0, marketDailyRate: 800.0, educationLevel: \\\"Master\\\", seniorityLevelID: 1 }) { expertID firstName } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create CompaniesContacts",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createCompaniesContacts(input: { companyId: 1, contactId: 1 }) { company { companyID } } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create ExpertContacts",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createExpertContacts(input: { expertId: 1, contactId: 1 }) { expert { expertID } } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create Expertise",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createExpertise(input: { name: \\\"Java\\\", description: \\\"Expert in Java programming\\\" }) { expertiseID name } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create ExpertVehicles",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createExpertVehicles(input: { expertID: 1, brand: \\\"Toyota\\\", model: \\\"Corolla\\\", color: \\\"Blue\\\", licensePlate: \\\"ABC1234\\\" }) { vehicleID brand } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create CompanyDevices",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createCompanyDevices(input: { deviceType: \\\"Laptop\\\", name: \\\"Dell XPS\\\", serialNumber: \\\"SN123456\\\", purchasePrice: 1200.0, assignedExpertID: 1 }) { deviceID name } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create ExpertExpertise",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createExpertExpertise(input: { expertID: 1, expertiseID: 1, level: Advanced, acquiredDate: \\\"2020-01-01T00:00:00\\\", certificate: \\\"Oracle Certified\\\" }) { expertExpertiseID level } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create ExpertBenefits",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createExpertBenefits(input: { expertID: 1, benefitName: \\\"Health Insurance\\\", benefitType: NonMaterial, period: Monthly, cost: 200.0 }) { benefitID benefitName } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create Teams",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createTeams(input: { teamName: \\\"Development Team\\\", teamOfficeId: \\\"Office101\\\", teamLeaderID: 1 }) { teamID teamName } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create TeamExperts",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createTeamExperts(input: { teamID: 1, expertID: 1, assignedAt: \\\"2022-01-01T00:00:00\\\" }) { assignedAt } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create CompanyCustomerContracts",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createCompanyCustomerContracts(input: { companyID: 1, contractType: Framework, startDate: \\\"2022-01-01T00:00:00\\\", endDate: \\\"2023-01-01T00:00:00\\\", totalValue: 50000.0, contractURL: \\\"http://example.com/contract\\\" }) { customerContractID } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create CompanyInternalContracts",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createCompanyInternalContracts(input: { companyID: 1, contractName: \\\"Internal Service\\\", contractType: Subscription, startDate: \\\"2022-01-01T00:00:00\\\", endDate: \\\"2023-01-01T00:00:00\\\", monthlyCost: 1000.0, contractURL: \\\"http://example.com/internal\\\" }) { internalContractID } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create ExpertOrders",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createExpertOrders(input: { customerContractID: 1, expertID: 1, orderDate: \\\"2022-06-01T00:00:00\\\", totalPrice: 1500.0 }) { expertOrderID } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create Pricing",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createPricing(input: { companyID: 1, expertID: 1, teamID: 1, offeredPrice: 1000.0, margin: 200.0, validFrom: \\\"2022-01-01T00:00:00\\\", validTo: \\\"2022-12-31T23:59:59\\\", pricingVersion: 1 }) { pricingID } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create Assignment",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createAssignment(input: { expertID: 1, companyID: 1, startDate: \\\"2022-02-01T00:00:00\\\", endDate: \\\"2022-05-01T00:00:00\\\", description: \\\"Project assignment\\\" }) { assignmentID } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create AssignmentExpertise",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createAssignmentExpertise(input: { assignmentID: 1, expertiseID: 1, type: Used }) { assignmentExpertiseID } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    },
+    {
+      "name": "Create AuditLogs",
+      "request": {
+        "method": "POST",
+        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createAuditLogs(input: { tableName: \\\"Experts\\\", operationType: INSERT, recordID: 1, changedAt: \\\"2022-01-01T00:00:00\\\", changedBy: \\\"admin\\\" }) { auditLogID } }\" }"
+        },
+        "url": {         "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": [ "localhost" ],
+          "port": "8443",
+          "path": [ "graphql" ]
+        }
+      }
+    }
+  ]
+}
