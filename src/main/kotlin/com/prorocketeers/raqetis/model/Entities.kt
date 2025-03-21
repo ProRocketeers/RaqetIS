@@ -1,4 +1,3 @@
-// src/main/kotlin/com/example/demo/model/Entities.kt
 package com.prorocketeers.raqetis.model
 
 import jakarta.persistence.*

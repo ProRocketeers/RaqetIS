@@ -42,7 +42,7 @@ CREATE TABLE CompaniesContacts (
     CompanyID INT NOT NULL,
     ContactID INT NOT NULL,
     PRIMARY KEY (CompanyID, ContactID),
-    FOREIGN KEY (CompanyID) REFERENCES Experts(ExpertID) ON DELETE CASCADE,
+    FOREIGN KEY (CompanyID) REFERENCES Companies(CompanyID) ON DELETE CASCADE,
     FOREIGN KEY (ContactID) REFERENCES Contacts(ContactID) ON DELETE CASCADE
 );
 
@@ -90,25 +90,6 @@ CREATE TABLE Experts (
     FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID),
     FOREIGN KEY (SeniorityLevelID) REFERENCES SeniorityLevels(SeniorityLevelID),
     FOREIGN KEY (ContactID) REFERENCES Contacts(ContactID)
-);
-
--- Tabulka pro ukládání informací o odbornících
-CREATE TABLE Experts (
-    ExpertID SERIAL PRIMARY KEY,
-    FirstName VARCHAR(255) NOT NULL,
-    LastName VARCHAR(255) NOT NULL,
-    PersonalID VARCHAR(50),
-    BirthDate DATE,
-    AddressID INT,
-    Email VARCHAR(255),
-    Specialization VARCHAR(255),
-    MarketHourlyRate DECIMAL(10, 2),
-    MarketDailyRate DECIMAL(10, 2),
-    EducationLevel VARCHAR(255),
-    SeniorityLevelID INT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID),
-    FOREIGN KEY (SeniorityLevelID) REFERENCES SeniorityLevels(SeniorityLevelID)
 );
 
 -- Tabulka pro ukládání informací o vozidlech expertů
