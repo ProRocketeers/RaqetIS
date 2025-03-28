@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-	implementation("org.postgresql:postgresql:42.5.0")
+	implementation("org.postgresql:postgresql:42.7.2")
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation("org.jetbrains.kotlin:kotlin-test-junit5")
