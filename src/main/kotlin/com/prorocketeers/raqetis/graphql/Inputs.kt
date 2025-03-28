@@ -75,6 +75,23 @@ data class ExpertInput(
     val seniorityLevelID: Int
 )
 
+// Vstupní data pro entitu Payment
+data class PaymentInput (
+    val expertID: Int,
+    val paymentDate: String,
+    val periodStart: String,
+    val periodEnd: String,
+    val grossAmount: Float,
+    val netAmount: Float?,
+    val taxAmount: Float?,
+    val bonus: Float?,
+    val reimbursement: Float?,
+    val currency: String,
+    val paymentStatus: PaymentStatus,
+    val paymentMethod: PaymentMethod,
+    val notes: String?
+)
+
 // Vstupní data pro entitu ExpertVehicles
 data class ExpertVehiclesInput(
     val expertID: Int,

@@ -18,6 +18,9 @@ enum class CustomerContractType { Framework, Order }
 enum class InternalContractType { Subscription, Service, Other }
 enum class AssignmentExpertiseType { Used, Acquired }
 enum class OperationType { INSERT, UPDATE, DELETE }
+enum class PaymentStatus { Pending, Paid, Failed, Canceled }
+enum class PaymentMethod { BankTransfer, Cash, Crypto, Other }
+
 
 // ===== Entity: Address =====
 @Entity
@@ -385,6 +388,9 @@ open class Expert(
     @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var companyDevices: MutableList<CompanyDevices> = mutableListOf()
 
+    @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    open var payments: MutableList<Payment> = mutableListOf()
+
     // Aktualizováno: název join tabulky změněn na "TeamExperts", aby odpovídal initDB.sql
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -397,6 +403,78 @@ open class Expert(
     @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var pricing: MutableList<Pricing> = mutableListOf()
 }
+
+// ===== Entity: Payment =====
+@Entity
+@Table(name = "Payments")
+open class Payment(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    open val paymentID: Int = 0,
+    open val expertID: Int,
+    open val paymentDate: LocalDate,
+    open val periodStart: LocalDate,
+    open val periodEnd: LocalDate,
+    open val grossAmount: BigDecimal,
+    open val netAmount: BigDecimal? = null,
+    open val taxAmount: BigDecimal? = null,
+    open val bonus: BigDecimal = BigDecimal.ZERO,
+    open val reimbursement: BigDecimal = BigDecimal.ZERO,
+    open val currency: String = "",
+    open val paymentStatus: PaymentStatus,
+    open val paymentMethod: PaymentMethod,
+    open val notes: String? = null,
+    open val createdAt: LocalDateTime = LocalDateTime.now(),
+    open val updatedAt: LocalDateTime = LocalDateTime.now()
+) {
+    protected constructor() : this(
+        0, 0, LocalDate.now(), LocalDate.now(), LocalDate.now(), BigDecimal.ZERO,
+        null, null, BigDecimal.ZERO, BigDecimal.ZERO, "CZK", PaymentStatus.Pending,
+        PaymentMethod.BankTransfer, null, LocalDateTime.now(), LocalDateTime.now()
+    )
+
+    fun copy(
+        expertID: Int = this.expertID,
+        paymentDate: LocalDate = this.paymentDate,
+        periodStart: LocalDate = this.periodStart,
+        periodEnd: LocalDate = this.periodEnd,
+        grossAmount: BigDecimal = this.grossAmount,
+        netAmount: BigDecimal? = this.netAmount,
+        taxAmount: BigDecimal? = this.taxAmount,
+        bonus: BigDecimal = this.bonus,
+        reimbursement: BigDecimal = this.reimbursement,
+        currency: String = this.currency,
+        paymentStatus: PaymentStatus = this.paymentStatus,
+        paymentMethod: PaymentMethod = this.paymentMethod,
+        notes: String? = this.notes,
+        createdAt: LocalDateTime = this.createdAt,
+        updatedAt: LocalDateTime = this.updatedAt
+    ): Payment {
+        return Payment(
+            paymentID = this.paymentID,
+            expertID = expertID,
+            paymentDate = paymentDate,
+            periodStart = periodStart,
+            periodEnd = periodEnd,
+            grossAmount = grossAmount,
+            netAmount = netAmount,
+            taxAmount = taxAmount,
+            bonus = bonus,
+            reimbursement = reimbursement,
+            currency = currency,
+            paymentStatus = paymentStatus,
+            paymentMethod = paymentMethod,
+            notes = notes,
+            createdAt = createdAt,
+            updatedAt = updatedAt
+        )
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "expertID", insertable = false, updatable = false)
+    open var expert: Expert? = null
+}
+
 
 // ===== Entity: ExpertVehicles =====
 @Entity

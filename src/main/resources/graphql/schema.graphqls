@@ -65,6 +65,20 @@ enum OperationType {
     DELETE
 }
 
+enum PaymentStatus {
+    Pending
+    Paid
+    Failed
+    Canceled
+}
+
+enum PaymentMethod {
+    BankTransfer
+    Cash
+    Crypto
+    Other
+}
+
 "Definice typů entit"
 type Address {
     addressID: Int!
@@ -144,6 +158,25 @@ type Expert {
     educationLevel: String
     seniorityLevelID: Int!
     createdAt: String!
+}
+
+type Payment {
+    paymentID: Int!
+    expertID: Int!
+    paymentDate: String!
+    periodStart: String!
+    periodEnd: String!
+    grossAmount: Float!
+    netAmount: Float
+    taxAmount: Float
+    bonus: Float
+    reimbursement: Float
+    currency: String!
+    paymentStatus: PaymentStatus!
+    paymentMethod: PaymentMethod!
+    notes: String
+    createdAt: String!
+    updatedAt: String!
 }
 
 type ExpertVehicles {
@@ -328,6 +361,22 @@ input ExpertInput {
     seniorityLevelID: Int!
 }
 
+input PaymentInput {
+    expertID: Int!
+    paymentDate: String!
+    periodStart: String!
+    periodEnd: String!
+    grossAmount: Float!
+    netAmount: Float
+    taxAmount: Float
+    bonus: Float
+    reimbursement: Float
+    currency: String!
+    paymentStatus: PaymentStatus!
+    paymentMethod: PaymentMethod!
+    notes: String
+}
+
 input ExpertVehiclesInput {
     expertID: Int!
     brand: String!
@@ -469,6 +518,8 @@ type Query {
     expertOrder(id: Int!): ExpertOrders
     pricing: [Pricing!]!
     price(id: Int!): Pricing
+    payments: [Payment!]!
+    payment(id: Int!): Payment
     assignments: [Assignment!]!
     assignment(id: Int!): Assignment
     assignmentExpertises: [AssignmentExpertise!]!
@@ -493,6 +544,10 @@ type Mutation {
     createExpert(input: ExpertInput!): Expert!
     updateExpert(id: Int!, input: ExpertInput!): Expert!
     deleteExpert(id: Int!): Boolean!
+
+    createPayment(input: PaymentInput!): Payment!
+    updatePayment(id: Int!, input: PaymentInput!): Payment!
+    deletePayment(id: Int!): Boolean!
 
     createCompaniesContacts(input: CompaniesContactsInput!): CompaniesContacts!
     deleteCompaniesContacts(companyId: Int!, contactId: Int!): Boolean!

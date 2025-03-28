@@ -92,6 +92,27 @@ CREATE TABLE Experts (
     FOREIGN KEY (ContactID) REFERENCES Contacts(ContactID)
 );
 
+-- Tabulka pro uchovávání informací o platbách/mzdách expertů
+CREATE TABLE Payments (
+    PaymentID SERIAL PRIMARY KEY,
+    ExpertID INT NOT NULL,
+    PaymentDate DATE NOT NULL,
+    PeriodStart DATE NOT NULL,
+    PeriodEnd DATE NOT NULL,
+    GrossAmount DECIMAL(15, 2) NOT NULL,
+    NetAmount DECIMAL(15, 2),
+    TaxAmount DECIMAL(15, 2),
+    Bonus DECIMAL(15, 2) DEFAULT 0.00,
+    Reimbursement DECIMAL(15, 2) DEFAULT 0.00,
+    Currency VARCHAR(10) DEFAULT 'CZK',
+    PaymentStatus VARCHAR(50) CHECK (PaymentStatus IN ('Pending', 'Paid', 'Failed', 'Canceled')) DEFAULT 'Pending',
+    PaymentMethod VARCHAR(50) CHECK (PaymentMethod IN ('BankTransfer', 'Cash', 'Crypto', 'Other')) DEFAULT 'BankTransfer',
+    Notes TEXT,
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ExpertID) REFERENCES Experts(ExpertID) ON DELETE CASCADE
+);
+
 -- Tabulka pro ukládání informací o vozidlech expertů
 CREATE TABLE ExpertVehicles (
     VehicleID SERIAL PRIMARY KEY,

@@ -6,6 +6,8 @@ import org.springframework.graphql.data.method.annotation.Argument
 import org.springframework.graphql.data.method.annotation.MutationMapping
 import org.springframework.graphql.data.method.annotation.QueryMapping
 import org.springframework.stereotype.Controller
+import java.math.BigDecimal
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @Controller
@@ -14,6 +16,7 @@ class CrudResolver(
     private val contactRepository: ContactRepository,
     private val companyRepository: CompanyRepository,
     private val expertRepository: ExpertRepository,
+    private val paymentRepository: PaymentRepository,
     private val companiesContactsRepository: CompaniesContactsRepository,
     private val expertContactsRepository: ExpertContactsRepository,
     private val expertiseRepository: ExpertiseRepository,
@@ -61,6 +64,13 @@ class CrudResolver(
     @QueryMapping
     fun expert(@Argument id: Int): Expert? =
         expertRepository.findById(id).orElse(null)
+
+    @QueryMapping
+    fun payments(): List<Payment> = paymentRepository.findAll()
+
+    @QueryMapping
+    fun payment(@Argument id: Int): Payment? =
+        paymentRepository.findById(id).orElse(null)
 
     @QueryMapping
     fun companiesContacts(): List<CompaniesContacts> = companiesContactsRepository.findAll()
@@ -341,6 +351,56 @@ class CrudResolver(
     @MutationMapping
     fun deleteExpert(@Argument id: Int): Boolean {
         expertRepository.deleteById(id)
+        return true
+    }
+
+    //Payment Mutations
+    @MutationMapping
+    fun createPayment(@Argument input: PaymentInput): Payment {
+        val payment = Payment(
+            expertID = input.expertID,
+            paymentDate = LocalDate.parse(input.paymentDate),
+            periodStart = LocalDate.parse(input.periodStart),
+            periodEnd = LocalDate.parse(input.periodEnd),
+            grossAmount = input.grossAmount.toBigDecimal(),
+            netAmount = input.netAmount?.toBigDecimal(),
+            taxAmount = input.taxAmount?.toBigDecimal(),
+            bonus = input.bonus?.toBigDecimal() ?: BigDecimal.ZERO,
+            reimbursement = input.reimbursement?.toBigDecimal() ?: BigDecimal.ZERO,
+            currency = input.currency,
+            paymentStatus = input.paymentStatus,
+            paymentMethod = input.paymentMethod,
+            notes = input.notes
+        )
+        return paymentRepository.save(payment)
+    }
+
+    @MutationMapping
+    fun updatePayment(@Argument id: Int, @Argument input: PaymentInput): Payment {
+        val existing = paymentRepository.findById(id)
+            .orElseThrow { RuntimeException("Payment not found") }
+        val updatedPayment = existing.copy(
+            expertID = input.expertID,
+            paymentDate = LocalDate.parse(input.paymentDate),
+            periodStart = LocalDate.parse(input.periodStart),
+            periodEnd = LocalDate.parse(input.periodEnd),
+            grossAmount = input.grossAmount.toBigDecimal(),
+            netAmount = input.netAmount?.toBigDecimal(),
+            taxAmount = input.taxAmount?.toBigDecimal(),
+            bonus = input.bonus?.toBigDecimal() ?: BigDecimal.ZERO,
+            reimbursement = input.reimbursement?.toBigDecimal() ?: BigDecimal.ZERO,
+            currency = input.currency,
+            paymentStatus = input.paymentStatus,
+            paymentMethod = input.paymentMethod,
+            notes = input.notes
+        )
+
+        return paymentRepository.save(updatedPayment)
+    }
+
+    @MutationMapping
+    fun deletePayment(@Argument paymentID: Int): Boolean {
+        paymentRepository.deleteById(paymentID)
         return true
     }
 
