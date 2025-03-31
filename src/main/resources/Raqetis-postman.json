@@ -116,6 +116,30 @@
       }
     },
     {
+      "name": "Create Payment",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{ \"query\": \"mutation { createPayment(input: { expertID: 1, paymentDate: \\\"2025-03-28\\\", periodStart: \\\"2025-02-01\\\", periodEnd: \\\"2025-02-28\\\", grossAmount: 1000.00, paymentStatus: \\\"Paid\\\", paymentMethod: \\\"BankTransfer\\\" }) { paymentID expertID paymentDate grossAmount paymentStatus } }\" }"
+        },
+        "url": {
+          "raw": "https://localhost:8443/graphql",
+          "protocol": "https",
+          "host": ["localhost"],
+          "port": "8443",
+          "path": ["graphql"]
+        }
+      }
+    },
+    {
       "name": "Create CompaniesContacts",
       "request": {
         "method": "POST",
