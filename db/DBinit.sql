@@ -59,15 +59,8 @@ CREATE TABLE ExpertContacts (
 CREATE TABLE Expertise (
     ExpertiseID SERIAL PRIMARY KEY,
     Name VARCHAR(255) NOT NULL,
-    Description TEXT,
-    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabulka pro definování seniority (hard a soft skills)
-CREATE TABLE SeniorityLevels (
-    SeniorityLevelID SERIAL PRIMARY KEY,
     Type VARCHAR(10) NOT NULL CHECK (Type IN ('Hard', 'Soft')),
-    Level VARCHAR(10) NOT NULL CHECK (Level IN ('Junior', 'Medior', 'Senior', 'Expert')),
+    Description TEXT,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -85,10 +78,8 @@ CREATE TABLE Experts (
     MarketHourlyRate DECIMAL(10, 2),
     MarketDailyRate DECIMAL(10, 2),
     EducationLevel VARCHAR(255),
-    SeniorityLevelID INT,
     CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (AddressID) REFERENCES Addresses(AddressID),
-    FOREIGN KEY (SeniorityLevelID) REFERENCES SeniorityLevels(SeniorityLevelID),
     FOREIGN KEY (ContactID) REFERENCES Contacts(ContactID)
 );
 
@@ -140,7 +131,7 @@ CREATE TABLE ExpertExpertise (
     ExpertExpertiseID SERIAL PRIMARY KEY,
     ExpertID INT NOT NULL,
     ExpertiseID INT NOT NULL,
-    Level VARCHAR(12) NOT NULL CHECK (Level IN ('Beginner', 'Intermediate', 'Advanced', 'Expert')),
+    Level VARCHAR(10) NOT NULL CHECK (Level IN ('Junior', 'Medior', 'Senior', 'Expert')),
     AcquiredDate DATE,
     Certificate VARCHAR(255),
     FOREIGN KEY (ExpertID) REFERENCES Experts(ExpertID) ON DELETE CASCADE,
@@ -238,6 +229,7 @@ CREATE TABLE Assignments (
     AssignmentID SERIAL PRIMARY KEY,
     ExpertID INT NOT NULL,
     CompanyID INT NOT NULL,
+    PricingID INT NOT NULL UNIQUE,
     StartDate DATE NOT NULL,
     EndDate DATE,
     Description TEXT,

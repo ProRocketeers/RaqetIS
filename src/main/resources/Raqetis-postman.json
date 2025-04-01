@@ -78,33 +78,13 @@
       }
     },
     {
-      "name": "Create SeniorityLevels",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Content-Type", "value": "application/json", "type": "text" }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createSeniorityLevels(input: { type: Hard, level: Senior }) { seniorityLevelID level } }\" }"
-        },
-        "url": {
-          "raw": "https://localhost:8443/graphql",
-          "protocol": "https",
-          "host": [ "localhost" ],
-          "port": "8443",
-          "path": [ "graphql" ]
-        }
-      }
-    },
-    {
       "name": "Create Expert",
       "request": {
         "method": "POST",
         "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createExpert(input: { firstName: \\\"Alice\\\", lastName: \\\"Smith\\\", personalID: \\\"ABC123\\\", birthDate: \\\"1985-06-15\\\", addressID: 1, contactID: 1, email: \\\"alice@example.com\\\", specialization: \\\"Software Development\\\", marketHourlyRate: 100.0, marketDailyRate: 800.0, educationLevel: \\\"Master\\\", seniorityLevelID: 1 }) { expertID firstName } }\" }"
+          "raw": "{ \"query\": \"mutation { createExpert(input: { firstName: \\\"Alice\\\", lastName: \\\"Smith\\\", personalID: \\\"ABC123\\\", birthDate: \\\"1985-06-15\\\", addressID: 1, contactID: 1, email: \\\"alice@example.com\\\", specialization: \\\"Software Development\\\", marketHourlyRate: 100.0, marketDailyRate: 800.0, educationLevel: \\\"Master\\\" }) { expertID firstName } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -182,7 +162,7 @@
         "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createExpertise(input: { name: \\\"Java\\\", description: \\\"Expert in Java programming\\\" }) { expertiseID name } }\" }"
+          "raw": "{ \"query\": \"mutation { createExpertise(input: { name: \\\"Java\\\", type: Soft, description: \\\"Expert in Java programming\\\" }) { expertiseID name } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -236,7 +216,7 @@
         "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createExpertExpertise(input: { expertID: 1, expertiseID: 1, level: Advanced, acquiredDate: \\\"2020-01-01T00:00:00\\\", certificate: \\\"Oracle Certified\\\" }) { expertExpertiseID level } }\" }"
+          "raw": "{ \"query\": \"mutation { createExpertExpertise(input: { expertID: 1, expertiseID: 1, level: Senior, acquiredDate: \\\"2020-01-01T00:00:00\\\", certificate: \\\"Oracle Certified\\\" }) { expertExpertiseID level } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",

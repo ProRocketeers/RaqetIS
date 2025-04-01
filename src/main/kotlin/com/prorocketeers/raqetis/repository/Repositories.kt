@@ -21,7 +21,6 @@ import com.prorocketeers.raqetis.model.ExpertVehicles
 import com.prorocketeers.raqetis.model.Expertise
 import com.prorocketeers.raqetis.model.Pricing
 import com.prorocketeers.raqetis.model.Payment
-import com.prorocketeers.raqetis.model.SeniorityLevels
 import com.prorocketeers.raqetis.model.TeamExperts
 import com.prorocketeers.raqetis.model.TeamExpertsId
 import com.prorocketeers.raqetis.model.Teams
@@ -51,10 +50,6 @@ interface ExpertContactsRepository : JpaRepository<ExpertContacts, ExpertContact
 // Repozitář pro entitu Expertise
 @Repository
 interface ExpertiseRepository : JpaRepository<Expertise, Int>
-
-// Repozitář pro entitu SeniorityLevels
-@Repository
-interface SeniorityLevelsRepository : JpaRepository<SeniorityLevels, Int>
 
 // Repozitář pro entitu Expert
 @Repository

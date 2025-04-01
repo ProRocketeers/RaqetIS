@@ -13,13 +13,6 @@ enum ContactType {
     Website
 }
 
-enum ExpertiseLevel {
-    Beginner
-    Intermediate
-    Advanced
-    Expert
-}
-
 enum SeniorityType {
     Hard
     Soft
@@ -132,14 +125,8 @@ type ExpertContacts {
 type Expertise {
     expertiseID: Int!
     name: String!
-    description: String
-    createdAt: String!
-}
-
-type SeniorityLevels {
-    seniorityLevelID: Int!
     type: SeniorityType!
-    level: SeniorityLevel!
+    description: String
     createdAt: String!
 }
 
@@ -156,7 +143,6 @@ type Expert {
     marketHourlyRate: Float!
     marketDailyRate: Float!
     educationLevel: String
-    seniorityLevelID: Int!
     createdAt: String!
 }
 
@@ -201,7 +187,7 @@ type ExpertExpertise {
     expertExpertiseID: Int!
     expertID: Int!
     expertiseID: Int!
-    level: ExpertiseLevel!
+    level: SeniorityLevel!
     acquiredDate: String
     certificate: String
 }
@@ -340,12 +326,8 @@ input ExpertContactsInput {
 
 input ExpertiseInput {
     name: String!
-    description: String
-}
-
-input SeniorityLevelsInput {
     type: SeniorityType!
-    level: SeniorityLevel!
+    description: String
 }
 
 input ExpertInput {
@@ -360,7 +342,7 @@ input ExpertInput {
     marketHourlyRate: Float!
     marketDailyRate: Float!
     educationLevel: String
-    seniorityLevelID: Int!
+#    seniorityLevelID: Int!
 }
 
 input PaymentInput {
@@ -398,7 +380,7 @@ input CompanyDevicesInput {
 input ExpertExpertiseInput {
     expertID: Int!
     expertiseID: Int!
-    level: ExpertiseLevel!
+    level: SeniorityLevel!
     acquiredDate: String
     certificate: String
 }
@@ -499,8 +481,6 @@ type Query {
     expertContactsByIds(expertId: Int!, contactId: Int!): ExpertContacts
     expertises: [Expertise!]!
     expertise(id: Int!): Expertise
-    seniorityLevels: [SeniorityLevels!]!
-    seniorityLevel(id: Int!): SeniorityLevels
     expertVehicles: [ExpertVehicles!]!
     expertVehicle(id: Int!): ExpertVehicles
     companyDevices: [CompanyDevices!]!
@@ -561,10 +541,6 @@ type Mutation {
     createExpertise(input: ExpertiseInput!): Expertise!
     updateExpertise(id: Int!, input: ExpertiseInput!): Expertise!
     deleteExpertise(id: Int!): Boolean!
-
-    createSeniorityLevels(input: SeniorityLevelsInput!): SeniorityLevels!
-    updateSeniorityLevels(id: Int!, input: SeniorityLevelsInput!): SeniorityLevels!
-    deleteSeniorityLevels(id: Int!): Boolean!
 
     createExpertVehicles(input: ExpertVehiclesInput!): ExpertVehicles!
     updateExpertVehicles(id: Int!, input: ExpertVehiclesInput!): ExpertVehicles!
