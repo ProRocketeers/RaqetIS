@@ -272,6 +272,7 @@ type Pricing {
     validTo: String
     pricingVersion: Int!
     createdAt: String!
+    assignment: Assignment!
 }
 
 type Assignment {
@@ -281,6 +282,7 @@ type Assignment {
     startDate: String!
     endDate: String
     description: String
+    pricing: Pricing!
 }
 
 type AssignmentExpertise {
@@ -464,6 +466,7 @@ input AssignmentInput {
     startDate: String!
     endDate: String
     description: String
+    pricingID: Int!
 }
 
 input AssignmentExpertiseInput {

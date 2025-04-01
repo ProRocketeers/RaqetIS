@@ -128,7 +128,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createPayment(input: { expertID: 1, paymentDate: \\\"2025-03-28\\\", periodStart: \\\"2025-02-01\\\", periodEnd: \\\"2025-02-28\\\", grossAmount: 1000.00, paymentStatus: \\\"Paid\\\", paymentMethod: \\\"BankTransfer\\\" }) { paymentID expertID paymentDate grossAmount paymentStatus } }\" }"
+          "raw": "{ \"query\": \"mutation { createPayment(input: { expertID: 1, paymentDate: \\\"2025-03-28\\\", periodStart: \\\"2025-02-01\\\", periodEnd: \\\"2025-02-28\\\", grossAmount: 1000.00, currency: \\\"CZK\\\", paymentStatus: \\\"Paid\\\", paymentMethod: \\\"BankTransfer\\\" }) { paymentID expertID paymentDate grossAmount currency paymentStatus } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -377,17 +377,27 @@
       "name": "Create Assignment",
       "request": {
         "method": "POST",
-        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createAssignment(input: { expertID: 1, companyID: 1, startDate: \\\"2022-02-01T00:00:00\\\", endDate: \\\"2022-05-01T00:00:00\\\", description: \\\"Project assignment\\\" }) { assignmentID } }\" }"
+          "raw": "{ \"query\": \"mutation { createAssignment(input: { expertID: 1, companyID: 1, startDate: \\\"2022-02-01T00:00:00\\\", endDate: \\\"2022-05-01T00:00:00\\\", description: \\\"Project assignment\\\", pricingID: 1 }) { assignmentID } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
           "protocol": "https",
-          "host": [ "localhost" ],
+          "host": [
+            "localhost"
+          ],
           "port": "8443",
-          "path": [ "graphql" ]
+          "path": [
+            "graphql"
+          ]
         }
       }
     },

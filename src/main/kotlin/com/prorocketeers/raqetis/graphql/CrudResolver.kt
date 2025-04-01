@@ -836,12 +836,15 @@ class CrudResolver(
     // Assignment Mutations
     @MutationMapping
     fun createAssignment(@Argument input: AssignmentInput): Assignment {
+        val pricing = pricingRepository.findById(input.pricingID)
+            .orElseThrow { RuntimeException("Pricing not found") }
         val a = Assignment(
             expertID = input.expertID,
             companyID = input.companyID,
             startDate = input.startDate,
             endDate = input.endDate,
-            description = input.description
+            description = input.description,
+            pricing = pricing
         )
         return assignmentRepository.save(a)
     }
@@ -850,13 +853,16 @@ class CrudResolver(
     fun updateAssignment(@Argument id: Int, @Argument input: AssignmentInput): Assignment {
         val existing = assignmentRepository.findById(id)
             .orElseThrow { RuntimeException("Assignment not found") }
+        val pricing = pricingRepository.findById(input.pricingID)
+            .orElseThrow { RuntimeException("Pricing not found") }
         val updated = Assignment(
             assignmentID = existing.assignmentID,
             expertID = input.expertID,
             companyID = input.companyID,
             startDate = input.startDate,
             endDate = input.endDate,
-            description = input.description
+            description = input.description,
+            pricing = pricing
         )
         return assignmentRepository.save(updated)
     }

@@ -189,7 +189,8 @@ data class AssignmentInput(
     val companyID: Int,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime?,
-    val description: String?
+    val description: String?,
+    val pricingID: Int
 )
 
 // Vstupní data pro entitu AssignmentExpertise

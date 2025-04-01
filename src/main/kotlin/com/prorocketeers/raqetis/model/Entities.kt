@@ -690,6 +690,7 @@ open class ExpertOrders(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "expertID", insertable = false, updatable = false)
     open var expert: Expert? = null
+
 }
 
 // ===== Entity: Pricing =====
@@ -709,7 +710,7 @@ open class Pricing(
     open val pricingVersion: Int = 1,
     open val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    protected constructor() : this(0, null, null, null, BigDecimal.ZERO, BigDecimal.ZERO, LocalDateTime.now(), null, 1, LocalDateTime.now())
+    constructor() : this(0, null, null, null, BigDecimal.ZERO, BigDecimal.ZERO, LocalDateTime.now(), null, 1, LocalDateTime.now())
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyID", insertable = false, updatable = false)
@@ -722,6 +723,9 @@ open class Pricing(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamID", insertable = false, updatable = false)
     open var team: Teams? = null
+
+    @OneToOne(mappedBy = "pricing", optional = false, fetch = FetchType.LAZY)
+    open lateinit var assignment: Assignment
 }
 
 // ===== Entity: Assignment =====
@@ -735,9 +739,13 @@ open class Assignment(
     open val companyID: Int,
     open val startDate: LocalDateTime,
     open val endDate: LocalDateTime? = null,
-    open val description: String? = null
+    open val description: String? = null,
+
+    @OneToOne(optional = false, cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinColumn(name = "pricingID", nullable = false, unique = true)
+    open val pricing: Pricing
 ) {
-    protected constructor() : this(0, 0, 0, LocalDateTime.now(), null, null)
+    protected constructor() : this( 0, 0, 0, LocalDateTime.now(), null, null, Pricing())
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "expertID", insertable = false, updatable = false)
@@ -749,6 +757,7 @@ open class Assignment(
 
     @OneToMany(mappedBy = "assignment", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var assignmentExpertise: MutableList<AssignmentExpertise> = mutableListOf()
+
 }
 
 // ===== Entity: AssignmentExpertise =====

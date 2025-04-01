@@ -242,7 +242,8 @@ CREATE TABLE Assignments (
     EndDate DATE,
     Description TEXT,
     FOREIGN KEY (ExpertID) REFERENCES Experts(ExpertID),
-    FOREIGN KEY (CompanyID) REFERENCES Companies(CompanyID)
+    FOREIGN KEY (CompanyID) REFERENCES Companies(CompanyID),
+    FOREIGN KEY (PricingID) REFERENCES Pricing(PricingID)
 );
 
 -- Relace mezi přiřazeními a používanými expertízami
