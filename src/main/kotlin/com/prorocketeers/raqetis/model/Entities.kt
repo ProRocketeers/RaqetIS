@@ -293,6 +293,8 @@ open class Expert(
     open val contactID: Int? = null,
     open val email: String = "",
     open val specialization: String? = null,
+    @Enumerated(EnumType.STRING)
+    open val level: SeniorityLevel,
     open val marketHourlyRate: BigDecimal = BigDecimal.ZERO,
     open val marketDailyRate: BigDecimal = BigDecimal.ZERO,
     open val educationLevel: String? = null,
@@ -300,7 +302,7 @@ open class Expert(
 ) {
     protected constructor() : this(
         0, "", "", null, null, null, null, "",
-        null, BigDecimal.ZERO, BigDecimal.ZERO, null, LocalDateTime.now()
+        null, SeniorityLevel.Medior,  BigDecimal.ZERO, BigDecimal.ZERO, null, LocalDateTime.now()
     )
 
     fun copy(
@@ -312,6 +314,7 @@ open class Expert(
         contactID: Int? = this.contactID,
         email: String = this.email,
         specialization: String? = this.specialization,
+        level: SeniorityLevel = this.level,
         marketHourlyRate: BigDecimal = this.marketHourlyRate,
         marketDailyRate: BigDecimal = this.marketDailyRate,
         educationLevel: String? = this.educationLevel,
@@ -327,6 +330,7 @@ open class Expert(
             contactID = contactID,
             email = email,
             specialization = specialization,
+            level = level,
             marketHourlyRate = marketHourlyRate,
             marketDailyRate = marketDailyRate,
             educationLevel = educationLevel,

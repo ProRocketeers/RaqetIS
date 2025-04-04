@@ -64,6 +64,7 @@ data class ExpertInput(
     val contactID: Int?,
     val email: String,
     val specialization: String?,
+    val level: SeniorityLevel,
     val marketHourlyRate: BigDecimal,
     val marketDailyRate: BigDecimal,
     val educationLevel: String?,

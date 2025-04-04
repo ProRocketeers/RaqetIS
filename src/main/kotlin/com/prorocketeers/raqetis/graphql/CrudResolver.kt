@@ -20,7 +20,6 @@ class CrudResolver(
     private val companiesContactsRepository: CompaniesContactsRepository,
     private val expertContactsRepository: ExpertContactsRepository,
     private val expertiseRepository: ExpertiseRepository,
-//    private val seniorityLevelsRepository: SeniorityLevelsRepository,
     private val expertVehiclesRepository: ExpertVehiclesRepository,
     private val companyDevicesRepository: CompanyDevicesRepository,
     private val expertExpertiseRepository: ExpertExpertiseRepository,
@@ -312,10 +311,10 @@ class CrudResolver(
             contactID = input.contactID,
             email = input.email,
             specialization = input.specialization,
+            level = input.level,
             marketHourlyRate = input.marketHourlyRate,
             marketDailyRate = input.marketDailyRate,
             educationLevel = input.educationLevel,
-//            seniorityLevelID = input.seniorityLevelID
         )
         return expertRepository.save(expert)
     }
@@ -333,6 +332,7 @@ class CrudResolver(
             contactID = input.contactID,
             email = input.email,
             specialization = input.specialization,
+            level = input.level,
             marketHourlyRate = input.marketHourlyRate,
             marketDailyRate = input.marketDailyRate,
             educationLevel = input.educationLevel,
@@ -775,7 +775,7 @@ class CrudResolver(
     @MutationMapping
     fun updatePricing(@Argument id: Int, @Argument input: PricingInput): Pricing {
         val existing = pricingRepository.findById(id)
-            .orElseThrow { RuntimeException("Pricing not found") }
+            .orElseThrow { RuntimeException(" Pricing not found") }
         val updated = Pricing(
             pricingID = existing.pricingID,
             companyID = input.companyID,

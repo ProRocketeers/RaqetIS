@@ -75,6 +75,7 @@ CREATE TABLE Experts (
     ContactID INT,
     Email VARCHAR(255),
     Specialization VARCHAR(255),
+    Level VARCHAR(10) NOT NULL CHECK (Level IN ('Junior', 'Medior', 'Senior', 'Expert')),
     MarketHourlyRate DECIMAL(10, 2),
     MarketDailyRate DECIMAL(10, 2),
     EducationLevel VARCHAR(255),

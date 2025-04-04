@@ -84,7 +84,7 @@
         "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createExpert(input: { firstName: \\\"Alice\\\", lastName: \\\"Smith\\\", personalID: \\\"ABC123\\\", birthDate: \\\"1985-06-15\\\", addressID: 1, contactID: 1, email: \\\"alice@example.com\\\", specialization: \\\"Software Development\\\", marketHourlyRate: 100.0, marketDailyRate: 800.0, educationLevel: \\\"Master\\\" }) { expertID firstName } }\" }"
+          "raw": "{ \"query\": \"mutation { createExpert(input: { firstName: \\\"Alice\\\", lastName: \\\"Smith\\\", personalID: \\\"ABC123\\\", birthDate: \\\"1985-06-15\\\", addressID: 1, contactID: 1, email: \\\"alice@example.com\\\", specialization: \\\"Software Development\\\", level: Junior, marketHourlyRate: 100.0, marketDailyRate: 800.0, educationLevel: \\\"Master\\\" }) { expertID firstName } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -108,7 +108,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createPayment(input: { expertID: 1, paymentDate: \\\"2025-03-28\\\", periodStart: \\\"2025-02-01\\\", periodEnd: \\\"2025-02-28\\\", grossAmount: 1000.00, currency: \\\"CZK\\\", paymentStatus: \\\"Paid\\\", paymentMethod: \\\"BankTransfer\\\" }) { paymentID expertID paymentDate grossAmount currency paymentStatus } }\" }"
+          "raw": "{ \"query\": \"mutation { createPayment(input: { expertID: 1, paymentDate: \\\"2025-03-28\\\", periodStart: \\\"2025-02-01\\\", periodEnd: \\\"2025-02-28\\\", grossAmount: 1000.00, currency: \\\"CZK\\\", paymentStatus: Paid, paymentMethod: BankTransfer }) { paymentID expertID paymentDate grossAmount currency paymentStatus } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
