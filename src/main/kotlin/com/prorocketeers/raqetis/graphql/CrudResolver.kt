@@ -20,7 +20,6 @@ class CrudResolver(
     private val companiesContactsRepository: CompaniesContactsRepository,
     private val expertContactsRepository: ExpertContactsRepository,
     private val expertiseRepository: ExpertiseRepository,
-    private val seniorityLevelsRepository: SeniorityLevelsRepository,
     private val expertVehiclesRepository: ExpertVehiclesRepository,
     private val companyDevicesRepository: CompanyDevicesRepository,
     private val expertExpertiseRepository: ExpertExpertiseRepository,
@@ -98,13 +97,6 @@ class CrudResolver(
     @QueryMapping
     fun expertise(@Argument id: Int): Expertise? =
         expertiseRepository.findById(id).orElse(null)
-
-    @QueryMapping
-    fun seniorityLevels(): List<SeniorityLevels> = seniorityLevelsRepository.findAll()
-
-    @QueryMapping
-    fun seniorityLevel(@Argument id: Int): SeniorityLevels? =
-        seniorityLevelsRepository.findById(id).orElse(null)
 
     @QueryMapping
     fun expertVehicles(): List<ExpertVehicles> = expertVehiclesRepository.findAll()
@@ -319,10 +311,10 @@ class CrudResolver(
             contactID = input.contactID,
             email = input.email,
             specialization = input.specialization,
+            level = input.level,
             marketHourlyRate = input.marketHourlyRate,
             marketDailyRate = input.marketDailyRate,
             educationLevel = input.educationLevel,
-            seniorityLevelID = input.seniorityLevelID
         )
         return expertRepository.save(expert)
     }
@@ -340,10 +332,10 @@ class CrudResolver(
             contactID = input.contactID,
             email = input.email,
             specialization = input.specialization,
+            level = input.level,
             marketHourlyRate = input.marketHourlyRate,
             marketDailyRate = input.marketDailyRate,
             educationLevel = input.educationLevel,
-            seniorityLevelID = input.seniorityLevelID
         )
         return expertRepository.save(updated)
     }
@@ -441,6 +433,7 @@ class CrudResolver(
     fun createExpertise(@Argument input: ExpertiseInput): Expertise {
         val expertise = Expertise(
             name = input.name,
+            type = input.type,
             description = input.description,
             createdAt = LocalDateTime.now()
         )
@@ -453,6 +446,7 @@ class CrudResolver(
             .orElseThrow { RuntimeException("Expertise not found") }
         val updated = existing.copy(
             name = input.name,
+            type = input.type,
             description = input.description
         )
         return expertiseRepository.save(updated)
@@ -461,36 +455,6 @@ class CrudResolver(
     @MutationMapping
     fun deleteExpertise(@Argument id: Int): Boolean {
         expertiseRepository.deleteById(id)
-        return true
-    }
-
-    // SeniorityLevels Mutations
-    @MutationMapping
-    fun createSeniorityLevels(@Argument input: SeniorityLevelsInput): SeniorityLevels {
-        val sl = SeniorityLevels(
-            type = input.type,
-            level = input.level,
-            createdAt = LocalDateTime.now()
-        )
-        return seniorityLevelsRepository.save(sl)
-    }
-
-    @MutationMapping
-    fun updateSeniorityLevels(@Argument id: Int, @Argument input: SeniorityLevelsInput): SeniorityLevels {
-        val existing = seniorityLevelsRepository.findById(id)
-            .orElseThrow { RuntimeException("SeniorityLevels not found") }
-        val updated = SeniorityLevels(
-            seniorityLevelID = existing.seniorityLevelID,
-            type = input.type,
-            level = input.level,
-            createdAt = existing.createdAt
-        )
-        return seniorityLevelsRepository.save(updated)
-    }
-
-    @MutationMapping
-    fun deleteSeniorityLevels(@Argument id: Int): Boolean {
-        seniorityLevelsRepository.deleteById(id)
         return true
     }
 
@@ -811,7 +775,7 @@ class CrudResolver(
     @MutationMapping
     fun updatePricing(@Argument id: Int, @Argument input: PricingInput): Pricing {
         val existing = pricingRepository.findById(id)
-            .orElseThrow { RuntimeException("Pricing not found") }
+            .orElseThrow { RuntimeException(" Pricing not found") }
         val updated = Pricing(
             pricingID = existing.pricingID,
             companyID = input.companyID,
@@ -836,12 +800,15 @@ class CrudResolver(
     // Assignment Mutations
     @MutationMapping
     fun createAssignment(@Argument input: AssignmentInput): Assignment {
+        val pricing = pricingRepository.findById(input.pricingID)
+            .orElseThrow { RuntimeException("Pricing not found") }
         val a = Assignment(
             expertID = input.expertID,
             companyID = input.companyID,
             startDate = input.startDate,
             endDate = input.endDate,
-            description = input.description
+            description = input.description,
+            pricing = pricing
         )
         return assignmentRepository.save(a)
     }
@@ -850,13 +817,16 @@ class CrudResolver(
     fun updateAssignment(@Argument id: Int, @Argument input: AssignmentInput): Assignment {
         val existing = assignmentRepository.findById(id)
             .orElseThrow { RuntimeException("Assignment not found") }
+        val pricing = pricingRepository.findById(input.pricingID)
+            .orElseThrow { RuntimeException("Pricing not found") }
         val updated = Assignment(
             assignmentID = existing.assignmentID,
             expertID = input.expertID,
             companyID = input.companyID,
             startDate = input.startDate,
             endDate = input.endDate,
-            description = input.description
+            description = input.description,
+            pricing = pricing
         )
         return assignmentRepository.save(updated)
     }

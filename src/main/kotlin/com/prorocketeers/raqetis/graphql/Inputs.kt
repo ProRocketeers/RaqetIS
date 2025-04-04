@@ -50,13 +50,8 @@ data class ExpertContactsInput(
 // Vstupní data pro entitu Expertise
 data class ExpertiseInput(
     val name: String,
-    val description: String?
-)
-
-// Vstupní data pro entitu SeniorityLevels
-data class SeniorityLevelsInput(
     val type: SeniorityType,
-    val level: SeniorityLevel
+    val description: String?
 )
 
 // Vstupní data pro entitu Expert
@@ -69,6 +64,7 @@ data class ExpertInput(
     val contactID: Int?,
     val email: String,
     val specialization: String?,
+    val level: SeniorityLevel,
     val marketHourlyRate: BigDecimal,
     val marketDailyRate: BigDecimal,
     val educationLevel: String?,
@@ -114,7 +110,7 @@ data class CompanyDevicesInput(
 data class ExpertExpertiseInput(
     val expertID: Int,
     val expertiseID: Int,
-    val level: ExpertiseLevel,
+    val level: SeniorityLevel,
     val acquiredDate: LocalDateTime?,
     val certificate: String?
 )
@@ -189,7 +185,8 @@ data class AssignmentInput(
     val companyID: Int,
     val startDate: LocalDateTime,
     val endDate: LocalDateTime?,
-    val description: String?
+    val description: String?,
+    val pricingID: Int
 )
 
 // Vstupní data pro entitu AssignmentExpertise
