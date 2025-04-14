@@ -78,33 +78,13 @@
       }
     },
     {
-      "name": "Create SeniorityLevels",
-      "request": {
-        "method": "POST",
-        "header": [
-          { "key": "Content-Type", "value": "application/json", "type": "text" }
-        ],
-        "body": {
-          "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createSeniorityLevels(input: { type: Hard, level: Senior }) { seniorityLevelID level } }\" }"
-        },
-        "url": {
-          "raw": "https://localhost:8443/graphql",
-          "protocol": "https",
-          "host": [ "localhost" ],
-          "port": "8443",
-          "path": [ "graphql" ]
-        }
-      }
-    },
-    {
       "name": "Create Expert",
       "request": {
         "method": "POST",
         "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createExpert(input: { firstName: \\\"Alice\\\", lastName: \\\"Smith\\\", personalID: \\\"ABC123\\\", birthDate: \\\"1985-06-15\\\", addressID: 1, contactID: 1, email: \\\"alice@example.com\\\", specialization: \\\"Software Development\\\", marketHourlyRate: 100.0, marketDailyRate: 800.0, educationLevel: \\\"Master\\\", seniorityLevelID: 1 }) { expertID firstName } }\" }"
+          "raw": "{ \"query\": \"mutation { createExpert(input: { firstName: \\\"Alice\\\", lastName: \\\"Smith\\\", personalID: \\\"ABC123\\\", birthDate: \\\"1985-06-15\\\", addressID: 1, contactID: 1, email: \\\"alice@example.com\\\", specialization: \\\"Software Development\\\", level: Junior, marketHourlyRate: 100.0, marketDailyRate: 800.0, educationLevel: \\\"Master\\\" }) { expertID firstName } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -128,7 +108,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createPayment(input: { expertID: 1, paymentDate: \\\"2025-03-28\\\", periodStart: \\\"2025-02-01\\\", periodEnd: \\\"2025-02-28\\\", grossAmount: 1000.00, paymentStatus: \\\"Paid\\\", paymentMethod: \\\"BankTransfer\\\" }) { paymentID expertID paymentDate grossAmount paymentStatus } }\" }"
+          "raw": "{ \"query\": \"mutation { createPayment(input: { expertID: 1, paymentDate: \\\"2025-03-28\\\", periodStart: \\\"2025-02-01\\\", periodEnd: \\\"2025-02-28\\\", grossAmount: 1000.00, currency: \\\"CZK\\\", paymentStatus: Paid, paymentMethod: BankTransfer }) { paymentID expertID paymentDate grossAmount currency paymentStatus } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -182,7 +162,7 @@
         "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createExpertise(input: { name: \\\"Java\\\", description: \\\"Expert in Java programming\\\" }) { expertiseID name } }\" }"
+          "raw": "{ \"query\": \"mutation { createExpertise(input: { name: \\\"Java\\\", type: Soft, description: \\\"Expert in Java programming\\\" }) { expertiseID name } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -236,7 +216,7 @@
         "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createExpertExpertise(input: { expertID: 1, expertiseID: 1, level: Advanced, acquiredDate: \\\"2020-01-01T00:00:00\\\", certificate: \\\"Oracle Certified\\\" }) { expertExpertiseID level } }\" }"
+          "raw": "{ \"query\": \"mutation { createExpertExpertise(input: { expertID: 1, expertiseID: 1, level: Senior, acquiredDate: \\\"2020-01-01T00:00:00\\\", certificate: \\\"Oracle Certified\\\" }) { expertExpertiseID level } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
@@ -377,17 +357,27 @@
       "name": "Create Assignment",
       "request": {
         "method": "POST",
-        "header": [ { "key": "Content-Type", "value": "application/json", "type": "text" } ],
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
         "body": {
           "mode": "raw",
-          "raw": "{ \"query\": \"mutation { createAssignment(input: { expertID: 1, companyID: 1, startDate: \\\"2022-02-01T00:00:00\\\", endDate: \\\"2022-05-01T00:00:00\\\", description: \\\"Project assignment\\\" }) { assignmentID } }\" }"
+          "raw": "{ \"query\": \"mutation { createAssignment(input: { expertID: 1, companyID: 1, startDate: \\\"2022-02-01T00:00:00\\\", endDate: \\\"2022-05-01T00:00:00\\\", description: \\\"Project assignment\\\", pricingID: 1 }) { assignmentID } }\" }"
         },
         "url": {
           "raw": "https://localhost:8443/graphql",
           "protocol": "https",
-          "host": [ "localhost" ],
+          "host": [
+            "localhost"
+          ],
           "port": "8443",
-          "path": [ "graphql" ]
+          "path": [
+            "graphql"
+          ]
         }
       }
     },

@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 // ===== Enumy =====
 enum class AddressType { Home, Work, Billing, Shipping }
 enum class ContactType { Phone, Email, Other, Website }
-enum class ExpertiseLevel { Beginner, Intermediate, Advanced, Expert }
+//enum class ExpertiseLevel { Beginner, Intermediate, Advanced, Expert }
 enum class SeniorityType { Hard, Soft }
 enum class SeniorityLevel { Junior, Medior, Senior, Expert }
 enum class BenefitType { Material, NonMaterial }
@@ -249,19 +249,23 @@ open class Expertise(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open val expertiseID: Int = 0,
     open val name: String = "",
+    @Enumerated(EnumType.STRING)
+    open val type: SeniorityType = SeniorityType.Hard,
     open val description: String? = null,
     open val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    protected constructor() : this(0, "", null, LocalDateTime.now())
+    protected constructor() : this(0, "", SeniorityType.Hard, null, LocalDateTime.now())
 
     fun copy(
         name: String = this.name,
+        type: SeniorityType = this.type,
         description: String? = this.description,
         createdAt: LocalDateTime = this.createdAt
     ): Expertise {
         return Expertise(
             expertiseID = this.expertiseID,
             name = name,
+            type = type,
             description = description,
             createdAt = createdAt
         )
@@ -272,25 +276,6 @@ open class Expertise(
 
     @OneToMany(mappedBy = "expertise", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var assignmentExpertise: MutableList<AssignmentExpertise> = mutableListOf()
-}
-
-// ===== Entity: SeniorityLevels =====
-@Entity
-@Table(name = "SeniorityLevels")
-open class SeniorityLevels(
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    open val seniorityLevelID: Int = 0,
-    @Enumerated(EnumType.STRING)
-    open val type: SeniorityType = SeniorityType.Hard,
-    @Enumerated(EnumType.STRING)
-    open val level: SeniorityLevel = SeniorityLevel.Junior,
-    open val createdAt: LocalDateTime = LocalDateTime.now()
-) {
-    protected constructor() : this(0, SeniorityType.Hard, SeniorityLevel.Junior, LocalDateTime.now())
-
-    @OneToMany(mappedBy = "senioritylevels", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    open var experts: MutableList<Expert> = mutableListOf()
 }
 
 // ===== Entity: Expert =====
@@ -308,15 +293,16 @@ open class Expert(
     open val contactID: Int? = null,
     open val email: String = "",
     open val specialization: String? = null,
+    @Enumerated(EnumType.STRING)
+    open val level: SeniorityLevel,
     open val marketHourlyRate: BigDecimal = BigDecimal.ZERO,
     open val marketDailyRate: BigDecimal = BigDecimal.ZERO,
     open val educationLevel: String? = null,
-    open val seniorityLevelID: Int = 0,
     open val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
     protected constructor() : this(
         0, "", "", null, null, null, null, "",
-        null, BigDecimal.ZERO, BigDecimal.ZERO, null, 0, LocalDateTime.now()
+        null, SeniorityLevel.Medior,  BigDecimal.ZERO, BigDecimal.ZERO, null, LocalDateTime.now()
     )
 
     fun copy(
@@ -328,10 +314,10 @@ open class Expert(
         contactID: Int? = this.contactID,
         email: String = this.email,
         specialization: String? = this.specialization,
+        level: SeniorityLevel = this.level,
         marketHourlyRate: BigDecimal = this.marketHourlyRate,
         marketDailyRate: BigDecimal = this.marketDailyRate,
         educationLevel: String? = this.educationLevel,
-        seniorityLevelID: Int = this.seniorityLevelID,
         createdAt: LocalDateTime = this.createdAt
     ): Expert {
         return Expert(
@@ -344,10 +330,10 @@ open class Expert(
             contactID = contactID,
             email = email,
             specialization = specialization,
+            level = level,
             marketHourlyRate = marketHourlyRate,
             marketDailyRate = marketDailyRate,
             educationLevel = educationLevel,
-            seniorityLevelID = seniorityLevelID,
             createdAt = createdAt
         )
     }
@@ -359,10 +345,6 @@ open class Expert(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contactID", insertable = false, updatable = false)
     open var contact: Contact? = null
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seniorityLevelID", insertable = false, updatable = false)
-    open var senioritylevels: SeniorityLevels? = null
 
     @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var expertContacts: MutableList<ExpertContacts> = mutableListOf()
@@ -526,11 +508,11 @@ open class ExpertExpertise(
     open val expertID: Int,
     open val expertiseID: Int,
     @Enumerated(EnumType.STRING)
-    open val level: ExpertiseLevel,
+    open val level: SeniorityLevel,
     open val acquiredDate: LocalDateTime? = null,
     open val certificate: String? = null
 ) {
-    protected constructor() : this(0, 0, 0, ExpertiseLevel.Beginner, null, null)
+    protected constructor() : this(0, 0, 0, SeniorityLevel.Junior, null, null)
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "expertID", insertable = false, updatable = false)
@@ -690,6 +672,7 @@ open class ExpertOrders(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "expertID", insertable = false, updatable = false)
     open var expert: Expert? = null
+
 }
 
 // ===== Entity: Pricing =====
@@ -709,7 +692,7 @@ open class Pricing(
     open val pricingVersion: Int = 1,
     open val createdAt: LocalDateTime = LocalDateTime.now()
 ) {
-    protected constructor() : this(0, null, null, null, BigDecimal.ZERO, BigDecimal.ZERO, LocalDateTime.now(), null, 1, LocalDateTime.now())
+    constructor() : this(0, null, null, null, BigDecimal.ZERO, BigDecimal.ZERO, LocalDateTime.now(), null, 1, LocalDateTime.now())
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyID", insertable = false, updatable = false)
@@ -722,6 +705,9 @@ open class Pricing(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamID", insertable = false, updatable = false)
     open var team: Teams? = null
+
+    @OneToOne(mappedBy = "pricing", optional = false, fetch = FetchType.LAZY)
+    open lateinit var assignment: Assignment
 }
 
 // ===== Entity: Assignment =====
@@ -735,9 +721,13 @@ open class Assignment(
     open val companyID: Int,
     open val startDate: LocalDateTime,
     open val endDate: LocalDateTime? = null,
-    open val description: String? = null
+    open val description: String? = null,
+
+    @OneToOne(optional = false, cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinColumn(name = "pricingID", nullable = false, unique = true)
+    open val pricing: Pricing
 ) {
-    protected constructor() : this(0, 0, 0, LocalDateTime.now(), null, null)
+    protected constructor() : this( 0, 0, 0, LocalDateTime.now(), null, null, Pricing())
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "expertID", insertable = false, updatable = false)
@@ -749,6 +739,7 @@ open class Assignment(
 
     @OneToMany(mappedBy = "assignment", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var assignmentExpertise: MutableList<AssignmentExpertise> = mutableListOf()
+
 }
 
 // ===== Entity: AssignmentExpertise =====
