@@ -36,6 +36,8 @@ dependencies {
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:15.1.0")
+	implementation("org.flywaydb:flyway-core:11.7.0")
+	implementation("org.flywaydb:flyway-database-postgresql:11.7.0")
 }
 
 kotlin {
