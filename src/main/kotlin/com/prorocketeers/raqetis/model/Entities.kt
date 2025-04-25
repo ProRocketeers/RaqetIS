@@ -9,7 +9,6 @@ import java.time.LocalDateTime
 // ===== Enumy =====
 enum class AddressType { Home, Work, Billing, Shipping }
 enum class ContactType { Phone, Email, Other, Website }
-//enum class ExpertiseLevel { Beginner, Intermediate, Advanced, Expert }
 enum class SeniorityType { Hard, Soft }
 enum class SeniorityLevel { Junior, Medior, Senior, Expert }
 enum class BenefitType { Material, NonMaterial }
