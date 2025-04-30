@@ -68,7 +68,6 @@ data class ExpertInput(
     val marketHourlyRate: BigDecimal,
     val marketDailyRate: BigDecimal,
     val educationLevel: String?,
-    val seniorityLevelID: Int
 )
 
 // Vstupní data pro entitu Payment

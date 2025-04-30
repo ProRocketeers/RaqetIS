@@ -299,7 +299,6 @@ class CrudResolver(
         return true
     }
 
-    // Expert Mutations – nyní očekáváme, že birthDate je typu LocalDate
     @MutationMapping
     fun createExpert(@Argument input: ExpertInput): Expert {
         val expert = Expert(
@@ -391,7 +390,7 @@ class CrudResolver(
     }
 
     @MutationMapping
-    fun deletePayment(@Argument paymentID: Int): Boolean {
+    fun deletePayment(@Argument("id") paymentID: Int): Boolean {
         paymentRepository.deleteById(paymentID)
         return true
     }
