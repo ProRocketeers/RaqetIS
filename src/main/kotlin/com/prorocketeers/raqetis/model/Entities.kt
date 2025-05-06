@@ -175,7 +175,7 @@ open class Company(
     open var companyCustomerContracts: MutableList<CompanyCustomerContracts> = mutableListOf()
 
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    open var companyInternalContracts: MutableList<CompanyInternalContracts> = mutableListOf()
+    open var companyInternalContracts: MutableList<CompanySuppliersContracts> = mutableListOf()
 
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var pricing: MutableList<Pricing> = mutableListOf()
@@ -625,10 +625,10 @@ open class CompanyCustomerContracts(
     open var expertOrders: MutableList<ExpertOrders> = mutableListOf()
 }
 
-// ===== Entity: CompanyInternalContracts =====
+// ===== Entity: CompanySuppliersContracts =====
 @Entity
-@Table(name = "CompanyInternalContracts")
-open class CompanyInternalContracts(
+@Table(name = "CompanySuppliersContracts")
+open class CompanySuppliersContracts (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open val internalContractID: Int = 0,

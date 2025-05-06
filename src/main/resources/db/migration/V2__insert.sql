@@ -195,7 +195,7 @@ VALUES (1, 'Framework', '2022-01-01', '2024-12-31', 5000000.00, 'https://skoda-a
        (9, 'Framework', '2021-09-01', '2026-09-01', 6700000.00, 'https://zasilkovna.cz/contract9.pdf'),
        (10, 'Order', '2023-05-01', NULL, 1300000.00, 'https://ikea.cz/contract10.pdf');
 
-INSERT INTO CompanyInternalContracts (CompanyID, ContractName, ContractType, StartDate, EndDate, MonthlyCost,
+INSERT INTO CompanySuppliersContracts (CompanyID, ContractName, ContractType, StartDate, EndDate, MonthlyCost,
                                       ContractURL)
 VALUES (1, 'Microsoft 365', 'Subscription', '2023-01-01', NULL, 12500.00, 'https://contracts.skoda-auto.cz/m365.pdf'),
        (2, 'Údržba elektráren', 'Service', '2022-06-01', '2025-06-01', 42000.00,

@@ -227,7 +227,7 @@ type CompanyCustomerContracts {
     createdAt: String!
 }
 
-type CompanyInternalContracts {
+type CompanySuppliersContracts {
     internalContractID: Int!
     companyID: Int!
     contractName: String!
@@ -415,7 +415,7 @@ input CompanyCustomerContractsInput {
     contractURL: String
 }
 
-input CompanyInternalContractsInput {
+input CompanySuppliersContractsInput {
     companyID: Int!
     contractName: String!
     contractType: InternalContractType!
@@ -496,8 +496,8 @@ type Query {
     teamExpert(teamID: Int!, expertID: Int!): TeamExperts
     companyCustomerContracts: [CompanyCustomerContracts!]!
     companyCustomerContract(id: Int!): CompanyCustomerContracts
-    companyInternalContracts: [CompanyInternalContracts!]!
-    companyInternalContract(id: Int!): CompanyInternalContracts
+    companySuppliersContracts: [CompanySuppliersContracts!]!
+    companySuppliersContract(id: Int!): CompanySuppliersContracts
     expertOrders: [ExpertOrders!]!
     expertOrder(id: Int!): ExpertOrders
     pricing: [Pricing!]!
@@ -572,9 +572,9 @@ type Mutation {
     updateCompanyCustomerContracts(id: Int!, input: CompanyCustomerContractsInput!): CompanyCustomerContracts!
     deleteCompanyCustomerContracts(id: Int!): Boolean!
 
-    createCompanyInternalContracts(input: CompanyInternalContractsInput!): CompanyInternalContracts!
-    updateCompanyInternalContracts(id: Int!, input: CompanyInternalContractsInput!): CompanyInternalContracts!
-    deleteCompanyInternalContracts(id: Int!): Boolean!
+    createCompanySuppliersContracts(input: CompanySuppliersContractsInput!): CompanySuppliersContracts!
+    updateCompanySuppliersContracts(id: Int!, input: CompanySuppliersContractsInput!): CompanySuppliersContracts!
+    deleteCompanySuppliersContracts(id: Int!): Boolean!
 
     createExpertOrders(input: ExpertOrdersInput!): ExpertOrders!
     updateExpertOrders(id: Int!, input: ExpertOrdersInput!): ExpertOrders!

@@ -198,7 +198,7 @@ CREATE TABLE CompanyCustomerContracts
 );
 
 -- Tabulka pro ukládání informací o interních smlouvách (opakující se výdaje)
-CREATE TABLE CompanyInternalContracts
+CREATE TABLE CompanySuppliersContracts
 (
     InternalContractID SERIAL PRIMARY KEY,
     CompanyID          INT          NOT NULL,

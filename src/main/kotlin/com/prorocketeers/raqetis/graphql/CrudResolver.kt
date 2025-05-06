@@ -27,7 +27,7 @@ class CrudResolver(
     private val teamsRepository: TeamsRepository,
     private val teamExpertsRepository: TeamExpertsRepository,
     private val companyCustomerContractsRepository: CompanyCustomerContractsRepository,
-    private val companyInternalContractsRepository: CompanyInternalContractsRepository,
+    private val companySuppliersContractsRepository: CompanySuppliersContractsRepository,
     private val expertOrdersRepository: ExpertOrdersRepository,
     private val pricingRepository: PricingRepository,
     private val assignmentRepository: AssignmentRepository,
@@ -151,11 +151,11 @@ class CrudResolver(
         companyCustomerContractsRepository.findById(id).orElse(null)
 
     @QueryMapping
-    fun companyInternalContracts(): List<CompanyInternalContracts> = companyInternalContractsRepository.findAll()
+    fun companySuppliersContracts(): List<CompanySuppliersContracts> = companySuppliersContractsRepository.findAll()
 
     @QueryMapping
-    fun companyInternalContract(@Argument id: Int): CompanyInternalContracts? =
-        companyInternalContractsRepository.findById(id).orElse(null)
+    fun companySuppliersContract(@Argument id: Int): CompanySuppliersContracts? =
+        companySuppliersContractsRepository.findById(id).orElse(null)
 
     @QueryMapping
     fun expertOrders(): List<ExpertOrders> = expertOrdersRepository.findAll()
@@ -680,10 +680,10 @@ class CrudResolver(
         return true
     }
 
-    // CompanyInternalContracts Mutations
+    // CompanySuppliersContracts Mutations
     @MutationMapping
-    fun createCompanyInternalContracts(@Argument input: CompanyInternalContractsInput): CompanyInternalContracts {
-        val cic = CompanyInternalContracts(
+    fun createCompanySuppliersContracts(@Argument input: CompanySuppliersContractsInput): CompanySuppliersContracts {
+        val cic = CompanySuppliersContracts(
             companyID = input.companyID,
             contractName = input.contractName,
             contractType = input.contractType,
@@ -693,14 +693,14 @@ class CrudResolver(
             contractURL = input.contractURL,
             createdAt = LocalDateTime.now()
         )
-        return companyInternalContractsRepository.save(cic)
+        return companySuppliersContractsRepository.save(cic)
     }
 
     @MutationMapping
-    fun updateCompanyInternalContracts(@Argument id: Int, @Argument input: CompanyInternalContractsInput): CompanyInternalContracts {
-        val existing = companyInternalContractsRepository.findById(id)
-            .orElseThrow { RuntimeException("CompanyInternalContracts not found") }
-        val updated = CompanyInternalContracts(
+    fun updateCompanySuppliersContracts(@Argument id: Int, @Argument input: CompanySuppliersContracts): CompanySuppliersContracts {
+        val existing = companySuppliersContractsRepository.findById(id)
+            .orElseThrow { RuntimeException("CompanySuppliersContracts not found") }
+        val updated = CompanySuppliersContracts(
             internalContractID = existing.internalContractID,
             companyID = input.companyID,
             contractName = input.contractName,
@@ -711,12 +711,12 @@ class CrudResolver(
             contractURL = input.contractURL,
             createdAt = existing.createdAt
         )
-        return companyInternalContractsRepository.save(updated)
+        return companySuppliersContractsRepository.save(updated)
     }
 
     @MutationMapping
-    fun deleteCompanyInternalContracts(@Argument id: Int): Boolean {
-        companyInternalContractsRepository.deleteById(id)
+    fun deleteCompanySuppliersContracts(@Argument id: Int): Boolean {
+        companySuppliersContractsRepository.deleteById(id)
         return true
     }
 

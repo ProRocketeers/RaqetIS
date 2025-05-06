@@ -147,8 +147,8 @@ data class CompanyCustomerContractsInput(
     val contractURL: String?
 )
 
-// Vstupní data pro entitu CompanyInternalContracts
-data class CompanyInternalContractsInput(
+// Vstupní data pro entitu CompanySuppliersContracts
+data class CompanySuppliersContractsInput(
     val companyID: Int,
     val contractName: String,
     val contractType: InternalContractType,

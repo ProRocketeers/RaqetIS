@@ -9,7 +9,7 @@ import com.prorocketeers.raqetis.model.CompaniesContactsId
 import com.prorocketeers.raqetis.model.Company
 import com.prorocketeers.raqetis.model.CompanyCustomerContracts
 import com.prorocketeers.raqetis.model.CompanyDevices
-import com.prorocketeers.raqetis.model.CompanyInternalContracts
+import com.prorocketeers.raqetis.model.CompanySuppliersContracts
 import com.prorocketeers.raqetis.model.Contact
 import com.prorocketeers.raqetis.model.Expert
 import com.prorocketeers.raqetis.model.ExpertBenefits
@@ -89,7 +89,7 @@ interface CompanyCustomerContractsRepository : JpaRepository<CompanyCustomerCont
 
 // Repozitář pro entitu CompanyInternalContracts
 @Repository
-interface CompanyInternalContractsRepository : JpaRepository<CompanyInternalContracts, Int>
+interface CompanySuppliersContractsRepository : JpaRepository<CompanySuppliersContracts, Int>
 
 // Repozitář pro entitu ExpertOrders
 @Repository
