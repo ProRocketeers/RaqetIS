@@ -137,25 +137,28 @@ data class TeamExpertsInput(
     val assignedAt: LocalDateTime? = null
 )
 
+// Vstupní data pro entitu Contract
+data class ContractInput(
+    val contractNumber: String?,
+    val contractType: ContractType,
+    val title: String,
+    val validFrom: LocalDate,
+    val validTo: LocalDate?,
+    val documentLink: String?
+)
+
 // Vstupní data pro entitu CompanyCustomerContracts
 data class CompanyCustomerContractsInput(
+    val contractID: Int,
     val companyID: Int,
-    val contractType: CustomerContractType,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime?,
-    val totalValue: BigDecimal,
-    val contractURL: String?
+    val totalValue: BigDecimal
 )
 
 // Vstupní data pro entitu CompanySuppliersContracts
 data class CompanySuppliersContractsInput(
+    val contractID: Int,
     val companyID: Int,
-    val contractName: String,
-    val contractType: InternalContractType,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime?,
-    val monthlyCost: BigDecimal,
-    val contractURL: String?
+    val monthlyCost: BigDecimal
 )
 
 // Vstupní data pro entitu ExpertOrders

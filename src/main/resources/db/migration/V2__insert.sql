@@ -183,36 +183,34 @@ VALUES (1, 1),
        (3, 9),
        (3, 10);
 
-INSERT INTO CompanyCustomerContracts (CompanyID, ContractType, StartDate, EndDate, TotalValue, ContractURL)
-VALUES (1, 'Framework', '2022-01-01', '2024-12-31', 5000000.00, 'https://skoda-auto.cz/contract1.pdf'),
-       (2, 'Order', '2023-03-15', '2023-09-15', 1200000.00, 'https://cez.cz/contract2.pdf'),
-       (3, 'Framework', '2021-06-01', '2025-05-31', 3500000.00, 'https://seznam.cz/contract3.pdf'),
-       (4, 'Order', '2023-01-01', NULL, 800000.00, 'https://alza.cz/contract4.pdf'),
-       (5, 'Framework', '2020-04-01', '2025-04-01', 7800000.00, 'https://t-mobile.cz/contract5.pdf'),
-       (6, 'Order', '2022-11-10', '2023-11-10', 900000.00, 'https://avast.com/contract6.pdf'),
-       (7, 'Framework', '2022-07-01', NULL, 1500000.00, 'https://kofola.cz/contract7.pdf'),
-       (8, 'Order', '2024-01-01', '2024-12-31', 1000000.00, 'https://barum.cz/contract8.pdf'),
-       (9, 'Framework', '2021-09-01', '2026-09-01', 6700000.00, 'https://zasilkovna.cz/contract9.pdf'),
-       (10, 'Order', '2023-05-01', NULL, 1300000.00, 'https://ikea.cz/contract10.pdf');
+INSERT INTO Contracts (ContractNumber, ContractType, Title, ValidFrom, ValidTo, DocumentLink)
+VALUES
+    ('C-1001', 'Order', 'Rámcová smlouva Škoda Auto', '2022-01-01', '2024-12-31', 'https://skoda-auto.cz/contract1.pdf'),
+    ('C-1002', 'Order', 'Objednávka ČEZ', '2023-03-15', '2023-09-15', 'https://cez.cz/contract2.pdf'),
+    ('C-1003', 'Order', 'Rámcová smlouva Seznam', '2021-06-01', '2025-05-31', 'https://seznam.cz/contract3.pdf'),
+    ('C-1004', 'Order', 'Objednávka Alza', '2023-01-01', NULL, 'https://alza.cz/contract4.pdf'),
+    ('C-1005', 'Order', 'Rámcová smlouva T-Mobile', '2020-04-01', '2025-04-01', 'https://t-mobile.cz/contract5.pdf'),
+    ('C-1006', 'Service', 'Microsoft 365', '2023-01-01', NULL, 'https://contracts.skoda-auto.cz/m365.pdf'),
+    ('C-1007', 'Service', 'Údržba elektráren', '2022-06-01', '2025-06-01', 'https://contracts.cez.cz/maintenance.pdf'),
+    ('C-1008', 'Service', 'VPN Seznam', '2021-03-01', NULL, 'https://contracts.seznam.cz/vpn.pdf'),
+    ('C-1009', 'Service', 'Cloud hosting AWS', '2022-11-01', NULL, 'https://contracts.alza.cz/aws.pdf'),
+    ('C-1010', 'Service', 'Datové linky', '2023-01-15', '2026-01-15', 'https://contracts.t-mobile.cz/links.pdf');
 
-INSERT INTO CompanySuppliersContracts (CompanyID, ContractName, ContractType, StartDate, EndDate, MonthlyCost,
-                                      ContractURL)
-VALUES (1, 'Microsoft 365', 'Subscription', '2023-01-01', NULL, 12500.00, 'https://contracts.skoda-auto.cz/m365.pdf'),
-       (2, 'Údržba elektráren', 'Service', '2022-06-01', '2025-06-01', 42000.00,
-        'https://contracts.cez.cz/maintenance.pdf'),
-       (3, 'VPN Seznam', 'Other', '2021-03-01', NULL, 8000.00, 'https://contracts.seznam.cz/vpn.pdf'),
-       (4, 'Cloud hosting AWS', 'Subscription', '2022-11-01', NULL, 15000.00, 'https://contracts.alza.cz/aws.pdf'),
-       (5, 'Datové linky', 'Service', '2023-01-15', '2026-01-15', 24000.00, 'https://contracts.t-mobile.cz/links.pdf'),
-       (6, 'Antivirové licence', 'Subscription', '2023-04-01', NULL, 9500.00,
-        'https://contracts.avast.com/licences.pdf'),
-       (7, 'Distribuce nápojů', 'Service', '2020-10-01', '2024-10-01', 30000.00,
-        'https://contracts.kofola.cz/distribution.pdf'),
-       (8, 'Pneumatika testování', 'Other', '2021-07-01', '2025-07-01', 18000.00,
-        'https://contracts.barum.cz/testing.pdf'),
-       (9, 'Logistický software', 'Subscription', '2023-05-01', NULL, 12500.00,
-        'https://contracts.zasilkovna.cz/logistics.pdf'),
-       (10, 'Správa IT infrastruktury', 'Service', '2021-01-01', '2026-01-01', 20000.00,
-        'https://contracts.ikea.cz/it-support.pdf');
+INSERT INTO CompanyCustomerContracts (ContractID, CompanyID, TotalValue)
+VALUES
+    (1, 1, 5000000.00),
+    (2, 2, 1200000.00),
+    (3, 3, 3500000.00),
+    (4, 4, 800000.00),
+    (5, 5, 7800000.00);
+
+INSERT INTO CompanySuppliersContracts (ContractID, CompanyID, MonthlyCost)
+VALUES
+    (6, 6, 12500.00),
+    (7, 7, 42000.00),
+    (8, 8, 8000.00),
+    (9, 9, 15000.00),
+    (10, 10, 24000.00);
 
 INSERT INTO ExpertOrders (CustomerContractID, ExpertID, OrderDate, TotalPrice)
 VALUES (1, 1, '2024-01-15', 50000.00),
@@ -220,11 +218,11 @@ VALUES (1, 1, '2024-01-15', 50000.00),
        (3, 3, '2024-02-05', 60000.00),
        (4, 4, '2024-02-10', 30000.00),
        (5, 5, '2024-03-01', 52000.00),
-       (6, 6, '2024-03-12', 47000.00),
-       (7, 7, '2024-03-20', 55000.00),
-       (8, 8, '2024-04-01', 48000.00),
-       (9, 9, '2024-04-10', 51000.00),
-       (10, 10, '2024-04-15', 53000.00);
+       (1, 6, '2024-03-12', 47000.00),
+       (2, 7, '2024-03-20', 55000.00),
+       (3, 8, '2024-04-01', 48000.00),
+       (4, 9, '2024-04-10', 51000.00),
+       (5, 10, '2024-04-15', 53000.00);
 
 INSERT INTO Pricing (CompanyID, ExpertID, TeamID, OfferedPrice, Margin, ValidFrom, ValidTo)
 VALUES (1, 1, 1, 8500.00, 15.00, '2024-01-01', '2024-03-31'),

@@ -36,12 +36,9 @@ enum BenefitPeriod {
     Yearly
 }
 
-enum CustomerContractType {
+enum ContractType {
     Framework
     Order
-}
-
-enum InternalContractType {
     Subscription
     Service
     Other
@@ -216,27 +213,34 @@ type TeamExperts {
     assignedAt: String!
 }
 
+type Contracts {
+    contractID: Int!
+    contractNumber: String!
+    contractType: ContractType!
+    title: String!
+    validFrom: String!
+    validTo: String
+    documentLink: String
+    createdAt: String!
+    updatedAt: String!
+}
+
 type CompanyCustomerContracts {
     customerContractID: Int!
+    contractID: Int!
     companyID: Int!
-    contractType: CustomerContractType!
-    startDate: String!
-    endDate: String
     totalValue: Float!
-    contractURL: String
-    createdAt: String!
+    contract: Contracts!
+    company: Company
 }
 
 type CompanySuppliersContracts {
     internalContractID: Int!
+    contractID: Int!
     companyID: Int!
-    contractName: String!
-    contractType: InternalContractType!
-    startDate: String!
-    endDate: String
     monthlyCost: Float!
-    contractURL: String
-    createdAt: String!
+    contract: Contracts!
+    company: Company
 }
 
 type ExpertOrders {
@@ -406,23 +410,25 @@ input TeamExpertsInput {
     assignedAt: String
 }
 
+input ContractInput {
+    contractNumber: String!
+    contractType: ContractType!
+    title: String!
+    validFrom: String!
+    validTo: String
+    documentLink: String
+}
+
 input CompanyCustomerContractsInput {
+    contractID: Int!
     companyID: Int!
-    contractType: CustomerContractType!
-    startDate: String!
-    endDate: String
     totalValue: Float!
-    contractURL: String
 }
 
 input CompanySuppliersContractsInput {
+    contractID: Int!
     companyID: Int!
-    contractName: String!
-    contractType: InternalContractType!
-    startDate: String!
-    endDate: String
     monthlyCost: Float!
-    contractURL: String
 }
 
 input ExpertOrdersInput {
@@ -494,6 +500,8 @@ type Query {
     team(id: Int!): Teams
     teamExperts: [TeamExperts!]!
     teamExpert(teamID: Int!, expertID: Int!): TeamExperts
+    contracts: [Contracts!]!
+    contract(id: Int!): Contracts
     companyCustomerContracts: [CompanyCustomerContracts!]!
     companyCustomerContract(id: Int!): CompanyCustomerContracts
     companySuppliersContracts: [CompanySuppliersContracts!]!
@@ -567,6 +575,10 @@ type Mutation {
 
     createTeamExperts(input: TeamExpertsInput!): TeamExperts!
     deleteTeamExperts(teamID: Int!, expertID: Int!): Boolean!
+
+    createContract(input: ContractInput!): Contracts!
+    updateContract(id: Int!, input: ContractInput!): Contracts!
+    deleteContract(id: Int!): Boolean!
 
     createCompanyCustomerContracts(input: CompanyCustomerContractsInput!): CompanyCustomerContracts!
     updateCompanyCustomerContracts(id: Int!, input: CompanyCustomerContractsInput!): CompanyCustomerContracts!

@@ -183,17 +183,28 @@ CREATE TABLE TeamExperts
     FOREIGN KEY (ExpertID) REFERENCES Experts (ExpertID)
 );
 
+-- Tabulka pro ukládání obecných informací o smlouvách
+CREATE TABLE Contracts
+(
+    ContractID     SERIAL PRIMARY KEY,
+    ContractNumber VARCHAR(100) UNIQUE,
+    ContractType   VARCHAR(50) CHECK (ContractType IN ('Framework', 'Order', 'Subscription', 'Service', 'Other')),
+    Title          TEXT NOT NULL,
+    ValidFrom      DATE NOT NULL,
+    ValidTo        DATE,
+    DocumentLink   TEXT, -- např. URL k PDF
+    CreatedAt      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Tabulka pro ukládání informací o smlouvách se zákazníky
 CREATE TABLE CompanyCustomerContracts
 (
     CustomerContractID SERIAL PRIMARY KEY,
-    CompanyID          INT  NOT NULL,
-    ContractType       VARCHAR(20) CHECK (ContractType IN ('Framework', 'Order')),
-    StartDate          DATE NOT NULL,
-    EndDate            DATE,
+    ContractID         INT UNIQUE NOT NULL,
+    CompanyID          INT        NOT NULL,
     TotalValue         DECIMAL(15, 2),
-    ContractURL        VARCHAR(2048),
-    CreatedAt          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ContractID) REFERENCES Contracts (ContractID) ON DELETE CASCADE,
     FOREIGN KEY (CompanyID) REFERENCES Companies (CompanyID)
 );
 
@@ -201,14 +212,10 @@ CREATE TABLE CompanyCustomerContracts
 CREATE TABLE CompanySuppliersContracts
 (
     InternalContractID SERIAL PRIMARY KEY,
-    CompanyID          INT          NOT NULL,
-    ContractName       VARCHAR(255) NOT NULL,
-    ContractType       VARCHAR(50) CHECK (ContractType IN ('Subscription', 'Service', 'Other')),
-    StartDate          DATE         NOT NULL,
-    EndDate            DATE,
+    ContractID         INT UNIQUE NOT NULL,
+    CompanyID          INT        NOT NULL,
     MonthlyCost        DECIMAL(10, 2),
-    ContractURL        VARCHAR(2048),
-    CreatedAt          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ContractID) REFERENCES Contracts (ContractID) ON DELETE CASCADE,
     FOREIGN KEY (CompanyID) REFERENCES Companies (CompanyID)
 );
 
