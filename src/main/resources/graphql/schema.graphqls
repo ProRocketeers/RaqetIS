@@ -513,6 +513,8 @@ type Query {
 }
 
 type Mutation {
+    securedAction(data: String!): String!
+
     createAddress(input: AddressInput!): Address!
     updateAddress(id: Int!, input: AddressInput!): Address!
     deleteAddress(id: Int!): Boolean!
