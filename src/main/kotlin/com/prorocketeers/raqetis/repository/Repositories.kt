@@ -72,6 +72,10 @@ interface CompanyCustomerContractsRepository : JpaRepository<CompanyCustomerCont
 @Repository
 interface CompanySuppliersContractsRepository : JpaRepository<CompanySuppliersContracts, Int>
 
+// Repozitář pro entitu ExpertContracts
+@Repository
+interface ExpertContractsRepository : JpaRepository<ExpertContract, Int>
+
 // Repozitář pro entitu ExpertOrders
 @Repository
 interface ExpertOrdersRepository : JpaRepository<ExpertOrders, Int>

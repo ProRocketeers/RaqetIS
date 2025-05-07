@@ -184,33 +184,57 @@ VALUES (1, 1),
        (3, 10);
 
 INSERT INTO Contracts (ContractNumber, ContractType, Title, ValidFrom, ValidTo, DocumentLink)
-VALUES
-    ('C-1001', 'Order', 'Rámcová smlouva Škoda Auto', '2022-01-01', '2024-12-31', 'https://skoda-auto.cz/contract1.pdf'),
-    ('C-1002', 'Order', 'Objednávka ČEZ', '2023-03-15', '2023-09-15', 'https://cez.cz/contract2.pdf'),
-    ('C-1003', 'Order', 'Rámcová smlouva Seznam', '2021-06-01', '2025-05-31', 'https://seznam.cz/contract3.pdf'),
-    ('C-1004', 'Order', 'Objednávka Alza', '2023-01-01', NULL, 'https://alza.cz/contract4.pdf'),
-    ('C-1005', 'Order', 'Rámcová smlouva T-Mobile', '2020-04-01', '2025-04-01', 'https://t-mobile.cz/contract5.pdf'),
-    ('C-1006', 'Service', 'Microsoft 365', '2023-01-01', NULL, 'https://contracts.skoda-auto.cz/m365.pdf'),
-    ('C-1007', 'Service', 'Údržba elektráren', '2022-06-01', '2025-06-01', 'https://contracts.cez.cz/maintenance.pdf'),
-    ('C-1008', 'Service', 'VPN Seznam', '2021-03-01', NULL, 'https://contracts.seznam.cz/vpn.pdf'),
-    ('C-1009', 'Service', 'Cloud hosting AWS', '2022-11-01', NULL, 'https://contracts.alza.cz/aws.pdf'),
-    ('C-1010', 'Service', 'Datové linky', '2023-01-15', '2026-01-15', 'https://contracts.t-mobile.cz/links.pdf');
+VALUES ('C-1001', 'Order', 'Rámcová smlouva Škoda Auto', '2022-01-01', '2024-12-31',
+        'https://skoda-auto.cz/contract1.pdf'),
+       ('C-1002', 'Order', 'Objednávka ČEZ', '2023-03-15', '2023-09-15', 'https://cez.cz/contract2.pdf'),
+       ('C-1003', 'Order', 'Rámcová smlouva Seznam', '2021-06-01', '2025-05-31', 'https://seznam.cz/contract3.pdf'),
+       ('C-1004', 'Order', 'Objednávka Alza', '2023-01-01', NULL, 'https://alza.cz/contract4.pdf'),
+       ('C-1005', 'Order', 'Rámcová smlouva T-Mobile', '2020-04-01', '2025-04-01', 'https://t-mobile.cz/contract5.pdf'),
+       ('C-1006', 'Service', 'Microsoft 365', '2023-01-01', NULL, 'https://contracts.skoda-auto.cz/m365.pdf'),
+       ('C-1007', 'Service', 'Údržba elektráren', '2022-06-01', '2025-06-01',
+        'https://contracts.cez.cz/maintenance.pdf'),
+       ('C-1008', 'Service', 'VPN Seznam', '2021-03-01', NULL, 'https://contracts.seznam.cz/vpn.pdf'),
+       ('C-1009', 'Service', 'Cloud hosting AWS', '2022-11-01', NULL, 'https://contracts.alza.cz/aws.pdf'),
+       ('C-1010', 'Service', 'Datové linky', '2023-01-15', '2026-01-15', 'https://contracts.t-mobile.cz/links.pdf');
 
 INSERT INTO CompanyCustomerContracts (ContractID, CompanyID, TotalValue)
-VALUES
-    (1, 1, 5000000.00),
-    (2, 2, 1200000.00),
-    (3, 3, 3500000.00),
-    (4, 4, 800000.00),
-    (5, 5, 7800000.00);
+VALUES (1, 1, 5000000.00),
+       (2, 2, 1200000.00),
+       (3, 3, 3500000.00),
+       (4, 4, 800000.00),
+       (5, 5, 7800000.00);
 
 INSERT INTO CompanySuppliersContracts (ContractID, CompanyID, MonthlyCost)
-VALUES
-    (6, 6, 12500.00),
-    (7, 7, 42000.00),
-    (8, 8, 8000.00),
-    (9, 9, 15000.00),
-    (10, 10, 24000.00);
+VALUES (6, 6, 12500.00),
+       (7, 7, 42000.00),
+       (8, 8, 8000.00),
+       (9, 9, 15000.00),
+       (10, 10, 24000.00);
+
+INSERT INTO ExpertContracts (ExpertID, ContractID, RelationshipType, StartDate, EndDate, MaritalStatus, HasChildren,
+                             VacationDays, RemoteAllowed,
+                             GuaranteedUtilization, UtilizationPercentage, MonthlySalary, HourlyRate, BonusHourlyRate,
+                             DocumentCollectionLink, IsValid, Notes)
+VALUES (1, 1, 'HPP', '2023-01-01', NULL, 'Single', FALSE, 25, TRUE, TRUE, 100.00, 70000.00, NULL, NULL,
+        'https://docs.platforma.cz/contracts/exp1', TRUE, 'Interní zaměstnanec'),
+       (2, 2, 'ICO', '2023-02-15', NULL, 'Married', TRUE, NULL, TRUE, FALSE, 80.00, NULL, 900.00, 1000.00,
+        'https://docs.platforma.cz/contracts/exp2', TRUE, 'Dodavatel na IČO'),
+       (3, 3, 'DPP', '2023-03-10', '2023-12-31', 'Single', FALSE, NULL, FALSE, FALSE, 50.00, NULL, 400.00, NULL, NULL,
+        TRUE, 'Krátkodobá výpomoc'),
+       (4, 4, 'SRO', '2022-11-01', NULL, 'Married', TRUE, NULL, TRUE, TRUE, 75.00, NULL, 850.00, 950.00,
+        'https://drive.company.cz/contracts/exp4', TRUE, 'Spolupracující firma'),
+       (5, 5, 'HPP', '2023-01-01', NULL, 'Divorced', TRUE, 20, TRUE, FALSE, 100.00, 60000.00, NULL, NULL, NULL, TRUE,
+        'Interní vývojář'),
+       (6, 6, 'ICO', '2023-04-01', NULL, 'Single', FALSE, NULL, FALSE, TRUE, 60.00, NULL, 750.00, NULL,
+        'https://contracts.company.cz/exp6', TRUE, 'Exkluzivní spolupráce'),
+       (7, 7, 'DPP', '2023-05-01', '2023-09-30', 'Married', TRUE, NULL, FALSE, FALSE, 40.00, NULL, 500.00, NULL, NULL,
+        TRUE, 'Letní výpomoc'),
+       (8, 8, 'SRO', '2022-12-01', NULL, 'Widowed', FALSE, NULL, TRUE, TRUE, 90.00, NULL, 950.00, 1100.00,
+        'https://storage.contracts.cz/exp8', TRUE, 'Seniorní architekt'),
+       (9, 9, 'ICO', '2023-02-01', NULL, 'Single', FALSE, NULL, TRUE, FALSE, 85.00, NULL, 800.00, NULL, NULL, TRUE,
+        'Flexibilní spolupráce'),
+       (10, 10, 'HPP', '2023-01-10', NULL, 'Married', TRUE, 22, TRUE, TRUE, 100.00, 68000.00, NULL, NULL,
+        'https://contracts.internal/exp10', TRUE, 'Team lead zaměstnanec');
 
 INSERT INTO ExpertOrders (CustomerContractID, ExpertID, OrderDate, TotalPrice)
 VALUES (1, 1, '2024-01-15', 50000.00),

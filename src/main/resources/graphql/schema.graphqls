@@ -69,6 +69,20 @@ enum PaymentMethod {
     Other
 }
 
+enum RelationshipType {
+    HPP
+    DPP
+    ICO
+    SRO
+}
+
+enum MaritalStatus {
+    Single
+    Married
+    Divorced
+    Widowed
+}
+
 "Definice typů entit"
 type Address {
     addressID: Int!
@@ -252,6 +266,31 @@ type ExpertOrders {
     createdAt: String!
 }
 
+type ExpertContracts {
+    expertContractID: Int!
+    expertID: Int!
+    contractID: Int!
+    relationshipType: RelationshipType!
+    startDate: String
+    endDate: String
+    maritalStatus: MaritalStatus
+    hasChildren: Boolean
+    vacationDays: Int
+    remoteAllowed: Boolean!
+    guaranteedUtilization: Boolean!
+    utilizationPercentage: Float
+    monthlySalary: Float
+    hourlyRate: Float
+    bonusHourlyRate: Float
+    documentCollectionLink: String
+    isValid: Boolean!
+    notes: String
+    createdAt: String!
+    updatedAt: String!
+    expert: Expert
+    contract: Contracts
+}
+
 type Pricing {
     pricingID: Int!
     companyID: Int
@@ -431,6 +470,26 @@ input CompanySuppliersContractsInput {
     monthlyCost: Float!
 }
 
+input ExpertContractInput {
+    expertID: Int!
+    contractID: Int!
+    relationshipType: RelationshipType!
+    startDate: String
+    endDate: String
+    maritalStatus: MaritalStatus
+    hasChildren: Boolean
+    vacationDays: Int
+    remoteAllowed: Boolean = false
+    guaranteedUtilization: Boolean = false
+    utilizationPercentage: Float
+    monthlySalary: Float
+    hourlyRate: Float
+    bonusHourlyRate: Float
+    documentCollectionLink: String
+    isValid: Boolean = true
+    notes: String
+}
+
 input ExpertOrdersInput {
     customerContractID: Int!
     expertID: Int!
@@ -506,6 +565,8 @@ type Query {
     companyCustomerContract(id: Int!): CompanyCustomerContracts
     companySuppliersContracts: [CompanySuppliersContracts!]!
     companySuppliersContract(id: Int!): CompanySuppliersContracts
+    expertContracts: [ExpertContracts!]!
+    expertContract(id: Int!): ExpertContracts
     expertOrders: [ExpertOrders!]!
     expertOrder(id: Int!): ExpertOrders
     pricing: [Pricing!]!
@@ -587,6 +648,10 @@ type Mutation {
     createCompanySuppliersContracts(input: CompanySuppliersContractsInput!): CompanySuppliersContracts!
     updateCompanySuppliersContracts(id: Int!, input: CompanySuppliersContractsInput!): CompanySuppliersContracts!
     deleteCompanySuppliersContracts(id: Int!): Boolean!
+
+    createExpertContract(input: ExpertContractInput!): ExpertContracts!
+    updateExpertContract(id: Int!, input: ExpertContractInput!): ExpertContracts!
+    deleteExpertContract(id: Int!): Boolean!
 
     createExpertOrders(input: ExpertOrdersInput!): ExpertOrders!
     updateExpertOrders(id: Int!, input: ExpertOrdersInput!): ExpertOrders!

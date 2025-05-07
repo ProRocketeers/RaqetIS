@@ -29,6 +29,7 @@ class CrudResolver(
     private val contractsRepository: ContractsRepository,
     private val companyCustomerContractsRepository: CompanyCustomerContractsRepository,
     private val companySuppliersContractsRepository: CompanySuppliersContractsRepository,
+    private val expertContractsRepository: ExpertContractsRepository,
     private val expertOrdersRepository: ExpertOrdersRepository,
     private val pricingRepository: PricingRepository,
     private val assignmentRepository: AssignmentRepository,
@@ -163,6 +164,12 @@ class CrudResolver(
     @QueryMapping
     fun companySuppliersContract(@Argument id: Int): CompanySuppliersContracts? =
         companySuppliersContractsRepository.findById(id).orElse(null)
+
+    @QueryMapping
+    fun expertContracts(): List<ExpertContract> = expertContractsRepository.findAll()
+
+    @QueryMapping
+    fun expertContract(@Argument id: Int): ExpertContract? = expertContractsRepository.findById(id).orElse(null)
 
     @QueryMapping
     fun expertOrders(): List<ExpertOrders> = expertOrdersRepository.findAll()
@@ -749,6 +756,67 @@ class CrudResolver(
     @MutationMapping
     fun deleteCompanySuppliersContracts(@Argument id: Int): Boolean {
         companySuppliersContractsRepository.deleteById(id)
+        return true
+    }
+
+    // ExpertContracts Mutations
+    @MutationMapping
+    fun createExpertContract(@Argument input: ExpertContractsInput): ExpertContract {
+        val entity = ExpertContract(
+            expertID = input.expertID,
+            contractID = input.contractID,
+            relationshipType = input.relationshipType,
+            startDate = input.startDate,
+            endDate = input.endDate,
+            maritalStatus = input.maritalStatus,
+            hasChildren = input.hasChildren,
+            vacationDays = input.vacationDays,
+            remoteAllowed = input.remoteAllowed,
+            guaranteedUtilization = input.guaranteedUtilization,
+            utilizationPercentage = input.utilizationPercentage,
+            monthlySalary = input.monthlySalary,
+            hourlyRate = input.hourlyRate,
+            bonusHourlyRate = input.bonusHourlyRate,
+            documentCollectionLink = input.documentCollectionLink,
+            isValid = input.isValid,
+            notes = input.notes,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
+        return expertContractsRepository.save(entity)
+    }
+
+    @MutationMapping
+    fun updateExpertContract(@Argument id: Int, @Argument input: ExpertContractsInput): ExpertContract? {
+        val existing = expertContractsRepository.findById(id).orElse(null) ?: return null
+
+        val updated = existing.copy(
+            expertID = input.expertID,
+            contractID = input.contractID,
+            relationshipType = input.relationshipType,
+            startDate = input.startDate,
+            endDate = input.endDate,
+            maritalStatus = input.maritalStatus,
+            hasChildren = input.hasChildren,
+            vacationDays = input.vacationDays,
+            remoteAllowed = input.remoteAllowed,
+            guaranteedUtilization = input.guaranteedUtilization,
+            utilizationPercentage = input.utilizationPercentage,
+            monthlySalary = input.monthlySalary,
+            hourlyRate = input.hourlyRate,
+            bonusHourlyRate = input.bonusHourlyRate,
+            documentCollectionLink = input.documentCollectionLink,
+            isValid = input.isValid,
+            notes = input.notes,
+            updatedAt = LocalDateTime.now()
+        )
+
+        return expertContractsRepository.save(updated)
+    }
+
+    @MutationMapping
+    fun deleteExpertContract(@Argument id: Int): Boolean {
+        expertContractsRepository.deleteById(id)
         return true
     }
 

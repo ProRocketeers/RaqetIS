@@ -219,6 +219,33 @@ CREATE TABLE CompanySuppliersContracts
     FOREIGN KEY (CompanyID) REFERENCES Companies (CompanyID)
 );
 
+-- Tabulka pro smluvní vztahy expertů s provozovatelem platformy
+CREATE TABLE ExpertContracts
+(
+    ExpertContractID       SERIAL PRIMARY KEY,
+    ExpertID               INT         NOT NULL,
+    ContractID             INT         NOT NULL,
+    RelationshipType       VARCHAR(50) NOT NULL CHECK (RelationshipType IN ('HPP', 'DPP', 'ICO', 'SRO')),
+    StartDate              DATE,
+    EndDate                DATE,
+    MaritalStatus          VARCHAR(50) CHECK (MaritalStatus IN ('Single', 'Married', 'Divorced', 'Widowed')),
+    HasChildren            BOOLEAN,
+    VacationDays           INT,
+    RemoteAllowed          BOOLEAN   DEFAULT FALSE,
+    GuaranteedUtilization  BOOLEAN   DEFAULT FALSE,
+    UtilizationPercentage  DECIMAL(5, 2) CHECK (UtilizationPercentage >= 0 AND UtilizationPercentage <= 100),
+    MonthlySalary          DECIMAL(12, 2),
+    HourlyRate             DECIMAL(10, 2),
+    BonusHourlyRate        DECIMAL(10, 2),
+    DocumentCollectionLink TEXT,
+    IsValid                BOOLEAN   DEFAULT TRUE,
+    Notes                  TEXT,
+    CreatedAt              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ExpertID) REFERENCES Experts (ExpertID) ON DELETE CASCADE,
+    FOREIGN KEY (ContractID) REFERENCES Contracts (ContractID) ON DELETE CASCADE
+);
+
 -- Tabulka pro ukládání informací o objednávkách expertů v rámci zákaznických smluv
 CREATE TABLE ExpertOrders
 (

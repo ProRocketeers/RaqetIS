@@ -169,6 +169,27 @@ data class ExpertOrdersInput(
     val totalPrice: BigDecimal
 )
 
+// Vstupní data pro entitu ExpertContracts
+data class ExpertContractsInput(
+    val expertID: Int,
+    val contractID: Int,
+    val relationshipType: RelationshipType,
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
+    val maritalStatus: MaritalStatus? = null,
+    val hasChildren: Boolean? = null,
+    val vacationDays: Int? = null,
+    val remoteAllowed: Boolean = false,
+    val guaranteedUtilization: Boolean = false,
+    val utilizationPercentage: BigDecimal? = null,
+    val monthlySalary: BigDecimal? = null,
+    val hourlyRate: BigDecimal? = null,
+    val bonusHourlyRate: BigDecimal? = null,
+    val documentCollectionLink: String? = null,
+    val isValid: Boolean = true,
+    val notes: String? = null
+)
+
 // Vstupní data pro entitu Pricing
 data class PricingInput(
     val companyID: Int?,
