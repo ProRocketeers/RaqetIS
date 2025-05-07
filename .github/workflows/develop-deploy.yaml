@@ -1,0 +1,69 @@
+name: Develop Deploy
+
+on:
+  push:
+    # TODO: will probably change
+    branches: ['main']
+
+env:
+  REGISTRY: harbor.intra.prorocketeers.com 
+  IMAGE_NAME: raqetis/raqetis
+
+  ARGO_TRIGGER_TOKEN: ${{ secrets.ARGO_TRIGGER_TOKEN }}
+  # DOMAIN_DEV: raqetis.prork.cz
+
+jobs:
+  build-and-push-mage:
+    name: Build and push image
+    runs-on: [self-hosted]
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.1.6
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.1.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5.4.0
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: ${{ github.sha }}
+
+      - name: Build and push Docker image (DEV)
+        uses: docker/build-push-action@v6.1.0
+        with:
+          context: .
+          push: true
+          file: Dockerfile
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # just examples how to use it
+          # build-args: |
+          #   APP_ENV=${{env.APP_ENV}}
+          #   GTM_ID=${{ secrets.GTM_ID }}
+
+  deploy:
+    name: Deploy
+    runs-on: [self-hosted]
+    needs:
+      - build-and-push-image
+    # environment:
+    #   name: Preview
+    #   url: https://${{ env.DOMAIN_DEV }}
+    steps:
+      - name: Argo deploy (DEV)
+        run: |
+          curl -X POST \
+          -F ref=master \
+          -F token=${{ env.ARGO_TRIGGER_TOKEN }} \
+          -F "variables[VALUES_FILE]=raqetis/dev/values.yaml" \
+          -F "variables[IMAGE_TAG]=${{ github.sha }}" \
+          https://gitlab.com/api/v4/projects/50678519/trigger/pipeline
