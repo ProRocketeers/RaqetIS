@@ -1,29 +1,6 @@
 package com.prorocketeers.raqetis.repository
 
-import com.prorocketeers.raqetis.model.Address
-import com.prorocketeers.raqetis.model.Assignment
-import com.prorocketeers.raqetis.model.AssignmentExpertise
-import com.prorocketeers.raqetis.model.AuditLogs
-import com.prorocketeers.raqetis.model.CompaniesContacts
-import com.prorocketeers.raqetis.model.CompaniesContactsId
-import com.prorocketeers.raqetis.model.Company
-import com.prorocketeers.raqetis.model.CompanyCustomerContracts
-import com.prorocketeers.raqetis.model.CompanyDevices
-import com.prorocketeers.raqetis.model.CompanyInternalContracts
-import com.prorocketeers.raqetis.model.Contact
-import com.prorocketeers.raqetis.model.Expert
-import com.prorocketeers.raqetis.model.ExpertBenefits
-import com.prorocketeers.raqetis.model.ExpertContacts
-import com.prorocketeers.raqetis.model.ExpertContactsId
-import com.prorocketeers.raqetis.model.ExpertExpertise
-import com.prorocketeers.raqetis.model.ExpertOrders
-import com.prorocketeers.raqetis.model.ExpertVehicles
-import com.prorocketeers.raqetis.model.Expertise
-import com.prorocketeers.raqetis.model.Pricing
-import com.prorocketeers.raqetis.model.Payment
-import com.prorocketeers.raqetis.model.TeamExperts
-import com.prorocketeers.raqetis.model.TeamExpertsId
-import com.prorocketeers.raqetis.model.Teams
+import com.prorocketeers.raqetis.model.*
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
@@ -83,13 +60,21 @@ interface TeamsRepository : JpaRepository<Teams, Int>
 @Repository
 interface TeamExpertsRepository : JpaRepository<TeamExperts, TeamExpertsId>
 
+// Repozitář pro join entitu Contracts
+@Repository
+interface ContractsRepository : JpaRepository<Contract, Int>
+
 // Repozitář pro entitu CompanyCustomerContracts
 @Repository
 interface CompanyCustomerContractsRepository : JpaRepository<CompanyCustomerContracts, Int>
 
 // Repozitář pro entitu CompanyInternalContracts
 @Repository
-interface CompanyInternalContractsRepository : JpaRepository<CompanyInternalContracts, Int>
+interface CompanySuppliersContractsRepository : JpaRepository<CompanySuppliersContracts, Int>
+
+// Repozitář pro entitu ExpertContracts
+@Repository
+interface ExpertContractsRepository : JpaRepository<ExpertContract, Int>
 
 // Repozitář pro entitu ExpertOrders
 @Repository

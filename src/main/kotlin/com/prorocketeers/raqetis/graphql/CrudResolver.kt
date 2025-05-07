@@ -26,8 +26,10 @@ class CrudResolver(
     private val expertBenefitsRepository: ExpertBenefitsRepository,
     private val teamsRepository: TeamsRepository,
     private val teamExpertsRepository: TeamExpertsRepository,
+    private val contractsRepository: ContractsRepository,
     private val companyCustomerContractsRepository: CompanyCustomerContractsRepository,
-    private val companyInternalContractsRepository: CompanyInternalContractsRepository,
+    private val companySuppliersContractsRepository: CompanySuppliersContractsRepository,
+    private val expertContractsRepository: ExpertContractsRepository,
     private val expertOrdersRepository: ExpertOrdersRepository,
     private val pricingRepository: PricingRepository,
     private val assignmentRepository: AssignmentRepository,
@@ -144,6 +146,12 @@ class CrudResolver(
         teamExpertsRepository.findById(TeamExpertsId(teamID, expertID)).orElse(null)
 
     @QueryMapping
+    fun contracts(): List<Contract> = contractsRepository.findAll()
+
+    @QueryMapping
+    fun contract(@Argument id: Int): Contract? = contractsRepository.findById(id).orElse(null)
+
+    @QueryMapping
     fun companyCustomerContracts(): List<CompanyCustomerContracts> = companyCustomerContractsRepository.findAll()
 
     @QueryMapping
@@ -151,11 +159,17 @@ class CrudResolver(
         companyCustomerContractsRepository.findById(id).orElse(null)
 
     @QueryMapping
-    fun companyInternalContracts(): List<CompanyInternalContracts> = companyInternalContractsRepository.findAll()
+    fun companySuppliersContracts(): List<CompanySuppliersContracts> = companySuppliersContractsRepository.findAll()
 
     @QueryMapping
-    fun companyInternalContract(@Argument id: Int): CompanyInternalContracts? =
-        companyInternalContractsRepository.findById(id).orElse(null)
+    fun companySuppliersContract(@Argument id: Int): CompanySuppliersContracts? =
+        companySuppliersContractsRepository.findById(id).orElse(null)
+
+    @QueryMapping
+    fun expertContracts(): List<ExpertContract> = expertContractsRepository.findAll()
+
+    @QueryMapping
+    fun expertContract(@Argument id: Int): ExpertContract? = expertContractsRepository.findById(id).orElse(null)
 
     @QueryMapping
     fun expertOrders(): List<ExpertOrders> = expertOrdersRepository.findAll()
@@ -642,34 +656,68 @@ class CrudResolver(
         return true
     }
 
+    //Contracts Mutations
+    @MutationMapping
+    fun createContract(@Argument input: ContractInput): Contract {
+        val contract = Contract(
+            contractNumber = input.contractNumber,
+            contractType = input.contractType,
+            title = input.title,
+            validFrom = input.validFrom,
+            validTo = input.validTo,
+            documentLink = input.documentLink,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
+        return contractsRepository.save(contract)
+    }
+
+    @MutationMapping
+    fun updateContract(@Argument id: Int, @Argument input: ContractInput): Contract {
+        val existing = contractsRepository.findById(id)
+            .orElseThrow { RuntimeException("Contract not found with ID $id") }
+
+        val updated = Contract(
+            contractID = existing.contractID,
+            contractNumber = input.contractNumber,
+            contractType = input.contractType,
+            title = input.title,
+            validFrom = input.validFrom,
+            validTo = input.validTo,
+            documentLink = input.documentLink,
+            createdAt = existing.createdAt,
+            updatedAt = LocalDateTime.now()
+        )
+        return contractsRepository.save(updated)
+    }
+
+    @MutationMapping
+    fun deleteContract(@Argument id: Int): Boolean {
+        contractsRepository.deleteById(id)
+        return true
+    }
+
     // CompanyCustomerContracts Mutations
     @MutationMapping
     fun createCompanyCustomerContracts(@Argument input: CompanyCustomerContractsInput): CompanyCustomerContracts {
-        val ccc = CompanyCustomerContracts(
+        val customerContract = CompanyCustomerContracts(
+            contractID = input.contractID,
             companyID = input.companyID,
-            contractType = input.contractType,
-            startDate = input.startDate,
-            endDate = input.endDate,
-            totalValue = input.totalValue,
-            contractURL = input.contractURL,
-            createdAt = LocalDateTime.now()
+            totalValue = input.totalValue
         )
-        return companyCustomerContractsRepository.save(ccc)
+        return companyCustomerContractsRepository.save(customerContract)
     }
 
     @MutationMapping
     fun updateCompanyCustomerContracts(@Argument id: Int, @Argument input: CompanyCustomerContractsInput): CompanyCustomerContracts {
         val existing = companyCustomerContractsRepository.findById(id)
             .orElseThrow { RuntimeException("CompanyCustomerContracts not found") }
+
         val updated = CompanyCustomerContracts(
             customerContractID = existing.customerContractID,
+            contractID = input.contractID,
             companyID = input.companyID,
-            contractType = input.contractType,
-            startDate = input.startDate,
-            endDate = input.endDate,
-            totalValue = input.totalValue,
-            contractURL = input.contractURL,
-            createdAt = existing.createdAt
+            totalValue = input.totalValue
         )
         return companyCustomerContractsRepository.save(updated)
     }
@@ -680,43 +728,95 @@ class CrudResolver(
         return true
     }
 
-    // CompanyInternalContracts Mutations
+    // CompanySuppliersContracts Mutations
     @MutationMapping
-    fun createCompanyInternalContracts(@Argument input: CompanyInternalContractsInput): CompanyInternalContracts {
-        val cic = CompanyInternalContracts(
+    fun createCompanySuppliersContracts(@Argument input: CompanySuppliersContractsInput): CompanySuppliersContracts {
+        val suppliersContract = CompanySuppliersContracts(
+            contractID = input.contractID,
             companyID = input.companyID,
-            contractName = input.contractName,
-            contractType = input.contractType,
-            startDate = input.startDate,
-            endDate = input.endDate,
-            monthlyCost = input.monthlyCost,
-            contractURL = input.contractURL,
-            createdAt = LocalDateTime.now()
+            monthlyCost = input.monthlyCost
         )
-        return companyInternalContractsRepository.save(cic)
+        return companySuppliersContractsRepository.save(suppliersContract)
     }
 
     @MutationMapping
-    fun updateCompanyInternalContracts(@Argument id: Int, @Argument input: CompanyInternalContractsInput): CompanyInternalContracts {
-        val existing = companyInternalContractsRepository.findById(id)
-            .orElseThrow { RuntimeException("CompanyInternalContracts not found") }
-        val updated = CompanyInternalContracts(
+    fun updateCompanySuppliersContracts(@Argument id: Int, @Argument input: CompanySuppliersContractsInput): CompanySuppliersContracts {
+        val existing = companySuppliersContractsRepository.findById(id)
+            .orElseThrow { RuntimeException("CompanySuppliersContracts not found") }
+
+        val updated = CompanySuppliersContracts(
             internalContractID = existing.internalContractID,
+            contractID = input.contractID,
             companyID = input.companyID,
-            contractName = input.contractName,
-            contractType = input.contractType,
-            startDate = input.startDate,
-            endDate = input.endDate,
-            monthlyCost = input.monthlyCost,
-            contractURL = input.contractURL,
-            createdAt = existing.createdAt
+            monthlyCost = input.monthlyCost
         )
-        return companyInternalContractsRepository.save(updated)
+        return companySuppliersContractsRepository.save(updated)
     }
 
     @MutationMapping
-    fun deleteCompanyInternalContracts(@Argument id: Int): Boolean {
-        companyInternalContractsRepository.deleteById(id)
+    fun deleteCompanySuppliersContracts(@Argument id: Int): Boolean {
+        companySuppliersContractsRepository.deleteById(id)
+        return true
+    }
+
+    // ExpertContracts Mutations
+    @MutationMapping
+    fun createExpertContract(@Argument input: ExpertContractsInput): ExpertContract {
+        val entity = ExpertContract(
+            expertID = input.expertID,
+            contractID = input.contractID,
+            relationshipType = input.relationshipType,
+            startDate = input.startDate,
+            endDate = input.endDate,
+            maritalStatus = input.maritalStatus,
+            hasChildren = input.hasChildren,
+            vacationDays = input.vacationDays,
+            remoteAllowed = input.remoteAllowed,
+            guaranteedUtilization = input.guaranteedUtilization,
+            utilizationPercentage = input.utilizationPercentage,
+            monthlySalary = input.monthlySalary,
+            hourlyRate = input.hourlyRate,
+            bonusHourlyRate = input.bonusHourlyRate,
+            documentCollectionLink = input.documentCollectionLink,
+            isValid = input.isValid,
+            notes = input.notes,
+            createdAt = LocalDateTime.now(),
+            updatedAt = LocalDateTime.now()
+        )
+        return expertContractsRepository.save(entity)
+    }
+
+    @MutationMapping
+    fun updateExpertContract(@Argument id: Int, @Argument input: ExpertContractsInput): ExpertContract? {
+        val existing = expertContractsRepository.findById(id).orElse(null) ?: return null
+
+        val updated = existing.copy(
+            expertID = input.expertID,
+            contractID = input.contractID,
+            relationshipType = input.relationshipType,
+            startDate = input.startDate,
+            endDate = input.endDate,
+            maritalStatus = input.maritalStatus,
+            hasChildren = input.hasChildren,
+            vacationDays = input.vacationDays,
+            remoteAllowed = input.remoteAllowed,
+            guaranteedUtilization = input.guaranteedUtilization,
+            utilizationPercentage = input.utilizationPercentage,
+            monthlySalary = input.monthlySalary,
+            hourlyRate = input.hourlyRate,
+            bonusHourlyRate = input.bonusHourlyRate,
+            documentCollectionLink = input.documentCollectionLink,
+            isValid = input.isValid,
+            notes = input.notes,
+            updatedAt = LocalDateTime.now()
+        )
+
+        return expertContractsRepository.save(updated)
+    }
+
+    @MutationMapping
+    fun deleteExpertContract(@Argument id: Int): Boolean {
+        expertContractsRepository.deleteById(id)
         return true
     }
 

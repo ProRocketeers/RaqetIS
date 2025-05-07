@@ -137,25 +137,28 @@ data class TeamExpertsInput(
     val assignedAt: LocalDateTime? = null
 )
 
-// Vstupní data pro entitu CompanyCustomerContracts
-data class CompanyCustomerContractsInput(
-    val companyID: Int,
-    val contractType: CustomerContractType,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime?,
-    val totalValue: BigDecimal,
-    val contractURL: String?
+// Vstupní data pro entitu Contract
+data class ContractInput(
+    val contractNumber: String?,
+    val contractType: ContractType,
+    val title: String,
+    val validFrom: LocalDate,
+    val validTo: LocalDate?,
+    val documentLink: String?
 )
 
-// Vstupní data pro entitu CompanyInternalContracts
-data class CompanyInternalContractsInput(
+// Vstupní data pro entitu CompanyCustomerContracts
+data class CompanyCustomerContractsInput(
+    val contractID: Int,
     val companyID: Int,
-    val contractName: String,
-    val contractType: InternalContractType,
-    val startDate: LocalDateTime,
-    val endDate: LocalDateTime?,
-    val monthlyCost: BigDecimal,
-    val contractURL: String?
+    val totalValue: BigDecimal
+)
+
+// Vstupní data pro entitu CompanySuppliersContracts
+data class CompanySuppliersContractsInput(
+    val contractID: Int,
+    val companyID: Int,
+    val monthlyCost: BigDecimal
 )
 
 // Vstupní data pro entitu ExpertOrders
@@ -164,6 +167,27 @@ data class ExpertOrdersInput(
     val expertID: Int,
     val orderDate: LocalDateTime,
     val totalPrice: BigDecimal
+)
+
+// Vstupní data pro entitu ExpertContracts
+data class ExpertContractsInput(
+    val expertID: Int,
+    val contractID: Int,
+    val relationshipType: RelationshipType,
+    val startDate: LocalDate? = null,
+    val endDate: LocalDate? = null,
+    val maritalStatus: MaritalStatus? = null,
+    val hasChildren: Boolean? = null,
+    val vacationDays: Int? = null,
+    val remoteAllowed: Boolean = false,
+    val guaranteedUtilization: Boolean = false,
+    val utilizationPercentage: BigDecimal? = null,
+    val monthlySalary: BigDecimal? = null,
+    val hourlyRate: BigDecimal? = null,
+    val bonusHourlyRate: BigDecimal? = null,
+    val documentCollectionLink: String? = null,
+    val isValid: Boolean = true,
+    val notes: String? = null
 )
 
 // Vstupní data pro entitu Pricing

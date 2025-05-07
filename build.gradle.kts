@@ -35,9 +35,13 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	runtimeOnly("org.postgresql:postgresql")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:15.1.0")
+//	implementation("com.graphql-java-kickstart:graphql-spring-boot-starter:15.1.0")
 	implementation("org.flywaydb:flyway-core:11.7.0")
 	implementation("org.flywaydb:flyway-database-postgresql:11.7.0")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
+	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 kotlin {

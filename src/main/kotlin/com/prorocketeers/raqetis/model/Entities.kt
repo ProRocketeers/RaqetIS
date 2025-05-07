@@ -13,13 +13,13 @@ enum class SeniorityType { Hard, Soft }
 enum class SeniorityLevel { Junior, Medior, Senior, Expert }
 enum class BenefitType { Material, NonMaterial }
 enum class BenefitPeriod { Daily, Monthly, Yearly }
-enum class CustomerContractType { Framework, Order }
-enum class InternalContractType { Subscription, Service, Other }
+enum class ContractType { Framework, Order, Subscription, Service, Other}
 enum class AssignmentExpertiseType { Used, Acquired }
 enum class OperationType { INSERT, UPDATE, DELETE }
 enum class PaymentStatus { Pending, Paid, Failed, Canceled }
 enum class PaymentMethod { BankTransfer, Cash, Crypto, Other }
-
+enum class RelationshipType { HPP, DPP, ICO, SRO }
+enum class MaritalStatus { Single, Married, Divorced, Widowed }
 
 // ===== Entity: Address =====
 @Entity
@@ -175,7 +175,7 @@ open class Company(
     open var companyCustomerContracts: MutableList<CompanyCustomerContracts> = mutableListOf()
 
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    open var companyInternalContracts: MutableList<CompanyInternalContracts> = mutableListOf()
+    open var companyInternalContracts: MutableList<CompanySuppliersContracts> = mutableListOf()
 
     @OneToMany(mappedBy = "company", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var pricing: MutableList<Pricing> = mutableListOf()
@@ -371,6 +371,9 @@ open class Expert(
 
     @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     open var payments: MutableList<Payment> = mutableListOf()
+
+    @OneToMany(mappedBy = "expert", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    open var expertContracts: MutableList<ExpertContract> = mutableListOf()
 
     // Aktualizováno: název join tabulky změněn na "TeamExperts", aby odpovídal initDB.sql
     @ManyToMany(fetch = FetchType.LAZY)
@@ -598,6 +601,37 @@ data class TeamExpertsId(
     var expertID: Int = 0
 ) : Serializable
 
+// ===== Entity: Contracts =====
+@Entity
+@Table(name = "Contracts")
+open class Contract(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    open val contractID: Int = 0,
+    open val contractNumber: String? = null,
+    @Enumerated(EnumType.STRING)
+    open val contractType: ContractType,
+    open val title: String,
+    open val validFrom: LocalDate,
+    open val validTo: LocalDate? = null,
+    open val documentLink: String? = null,
+    open val createdAt: LocalDateTime = LocalDateTime.now(),
+    open val updatedAt: LocalDateTime = LocalDateTime.now(),
+) {
+    protected constructor() : this(
+        0, null, ContractType.Other, "", LocalDate.now(), null, null,
+        LocalDateTime.now(), LocalDateTime.now()
+    )
+
+    @OneToOne(mappedBy = "contract", optional = false, fetch = FetchType.LAZY)
+    open lateinit var customerContract: CompanyCustomerContracts
+
+    @OneToOne(mappedBy = "contract", optional = false, fetch = FetchType.LAZY)
+    open lateinit var supplierContract: CompanySuppliersContracts
+
+    @OneToMany(mappedBy = "contract", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    open var expertContracts: MutableList<ExpertContract> = mutableListOf()
+}
 
 // ===== Entity: CompanyCustomerContracts =====
 @Entity
@@ -606,47 +640,137 @@ open class CompanyCustomerContracts(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open val customerContractID: Int = 0,
+    open val contractID: Int,
     open val companyID: Int,
-    @Enumerated(EnumType.STRING)
-    open val contractType: CustomerContractType,
-    open val startDate: LocalDateTime,
-    open val endDate: LocalDateTime? = null,
-    open val totalValue: BigDecimal,
-    open val contractURL: String? = null,
-    open val createdAt: LocalDateTime = LocalDateTime.now()
+    open val totalValue: BigDecimal? = null
 ) {
-    protected constructor() : this(0, 0, CustomerContractType.Framework, LocalDateTime.now(), null, BigDecimal.ZERO, null, LocalDateTime.now())
+    protected constructor() : this(0, 0, 0, null)
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contractID", insertable = false, updatable = false)
+    open var contract: Contract? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyID", insertable = false, updatable = false)
     open var company: Company? = null
-
-    @OneToMany(mappedBy = "contract", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    open var expertOrders: MutableList<ExpertOrders> = mutableListOf()
 }
 
-// ===== Entity: CompanyInternalContracts =====
+// ===== Entity: CompanySuppliersContracts =====
 @Entity
-@Table(name = "CompanyInternalContracts")
-open class CompanyInternalContracts(
+@Table(name = "CompanySuppliersContracts")
+open class CompanySuppliersContracts(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     open val internalContractID: Int = 0,
+    open val contractID: Int,
     open val companyID: Int,
-    open val contractName: String = "",
-    @Enumerated(EnumType.STRING)
-    open val contractType: InternalContractType,
-    open val startDate: LocalDateTime,
-    open val endDate: LocalDateTime? = null,
-    open val monthlyCost: BigDecimal,
-    open val contractURL: String? = null,
-    open val createdAt: LocalDateTime = LocalDateTime.now()
+    open val monthlyCost: BigDecimal? = null
 ) {
-    protected constructor() : this(0, 0, "", InternalContractType.Subscription, LocalDateTime.now(), null, BigDecimal.ZERO, null, LocalDateTime.now())
+    protected constructor() : this(0, 0, 0, null)
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contractID", insertable = false, updatable = false)
+    open var contract: Contract? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "companyID", insertable = false, updatable = false)
     open var company: Company? = null
+}
+
+// ===== Entity: ExpertContracts =====
+@Entity
+@Table(name = "ExpertContracts")
+open class ExpertContract(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    open val expertContractID: Int = 0,
+    @Column(insertable = false, updatable = false)
+    open val expertID: Int? = null,
+    @Column(insertable = false, updatable = false)
+    open val contractID: Int? = null,
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    open val relationshipType: RelationshipType,
+    open val startDate: LocalDate? = null,
+    open val endDate: LocalDate? = null,
+    @Enumerated(EnumType.STRING)
+    open val maritalStatus: MaritalStatus? = null,
+    open val hasChildren: Boolean? = null,
+    open val vacationDays: Int? = null,
+    open val remoteAllowed: Boolean = false,
+    open val guaranteedUtilization: Boolean = false,
+    open val utilizationPercentage: BigDecimal? = null,
+    open val monthlySalary: BigDecimal? = null,
+    open val hourlyRate: BigDecimal? = null,
+    open val bonusHourlyRate: BigDecimal? = null,
+    open val documentCollectionLink: String? = null,
+    open val isValid: Boolean = true,
+    open val notes: String? = null,
+    open val createdAt: LocalDateTime = LocalDateTime.now(),
+    open val updatedAt: LocalDateTime = LocalDateTime.now()
+) {
+    protected constructor() : this(
+        0, null, null,
+        RelationshipType.HPP,
+        null, null, MaritalStatus.Single,
+        null, null, false, false,
+        null, null, null, null,
+        null, true, null,
+        LocalDateTime.now(), LocalDateTime.now()
+    )
+
+    fun copy(
+        expertID: Int? = this.expertID,
+        contractID: Int? = this.contractID,
+        relationshipType: RelationshipType = this.relationshipType,
+        startDate: LocalDate? = this.startDate,
+        endDate: LocalDate? = this.endDate,
+        maritalStatus: MaritalStatus? = this.maritalStatus,
+        hasChildren: Boolean? = this.hasChildren,
+        vacationDays: Int? = this.vacationDays,
+        remoteAllowed: Boolean = this.remoteAllowed,
+        guaranteedUtilization: Boolean = this.guaranteedUtilization,
+        utilizationPercentage: BigDecimal? = this.utilizationPercentage,
+        monthlySalary: BigDecimal? = this.monthlySalary,
+        hourlyRate: BigDecimal? = this.hourlyRate,
+        bonusHourlyRate: BigDecimal? = this.bonusHourlyRate,
+        documentCollectionLink: String? = this.documentCollectionLink,
+        isValid: Boolean = this.isValid,
+        notes: String? = this.notes,
+        createdAt: LocalDateTime = this.createdAt,
+        updatedAt: LocalDateTime = this.updatedAt
+    ): ExpertContract {
+        return ExpertContract(
+            expertContractID = this.expertContractID,
+            expertID = expertID,
+            contractID = contractID,
+            relationshipType = relationshipType,
+            startDate = startDate,
+            endDate = endDate,
+            maritalStatus = maritalStatus,
+            hasChildren = hasChildren,
+            vacationDays = vacationDays,
+            remoteAllowed = remoteAllowed,
+            guaranteedUtilization = guaranteedUtilization,
+            utilizationPercentage = utilizationPercentage,
+            monthlySalary = monthlySalary,
+            hourlyRate = hourlyRate,
+            bonusHourlyRate = bonusHourlyRate,
+            documentCollectionLink = documentCollectionLink,
+            isValid = isValid,
+            notes = notes,
+            createdAt = createdAt,
+            updatedAt = updatedAt
+        )
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "expertID", nullable = false)
+    open var expert: Expert? = null
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contractID", nullable = false)
+    open var contract: Contract? = null
 }
 
 // ===== Entity: ExpertOrders =====

@@ -36,12 +36,9 @@ enum BenefitPeriod {
     Yearly
 }
 
-enum CustomerContractType {
+enum ContractType {
     Framework
     Order
-}
-
-enum InternalContractType {
     Subscription
     Service
     Other
@@ -70,6 +67,20 @@ enum PaymentMethod {
     Cash
     Crypto
     Other
+}
+
+enum RelationshipType {
+    HPP
+    DPP
+    ICO
+    SRO
+}
+
+enum MaritalStatus {
+    Single
+    Married
+    Divorced
+    Widowed
 }
 
 "Definice typů entit"
@@ -216,27 +227,34 @@ type TeamExperts {
     assignedAt: String!
 }
 
-type CompanyCustomerContracts {
-    customerContractID: Int!
-    companyID: Int!
-    contractType: CustomerContractType!
-    startDate: String!
-    endDate: String
-    totalValue: Float!
-    contractURL: String
+type Contracts {
+    contractID: Int!
+    contractNumber: String!
+    contractType: ContractType!
+    title: String!
+    validFrom: String!
+    validTo: String
+    documentLink: String
     createdAt: String!
+    updatedAt: String!
 }
 
-type CompanyInternalContracts {
-    internalContractID: Int!
+type CompanyCustomerContracts {
+    customerContractID: Int!
+    contractID: Int!
     companyID: Int!
-    contractName: String!
-    contractType: InternalContractType!
-    startDate: String!
-    endDate: String
+    totalValue: Float!
+    contract: Contracts!
+    company: Company
+}
+
+type CompanySuppliersContracts {
+    internalContractID: Int!
+    contractID: Int!
+    companyID: Int!
     monthlyCost: Float!
-    contractURL: String
-    createdAt: String!
+    contract: Contracts!
+    company: Company
 }
 
 type ExpertOrders {
@@ -246,6 +264,31 @@ type ExpertOrders {
     orderDate: String!
     totalPrice: Float!
     createdAt: String!
+}
+
+type ExpertContracts {
+    expertContractID: Int!
+    expertID: Int!
+    contractID: Int!
+    relationshipType: RelationshipType!
+    startDate: String
+    endDate: String
+    maritalStatus: MaritalStatus
+    hasChildren: Boolean
+    vacationDays: Int
+    remoteAllowed: Boolean!
+    guaranteedUtilization: Boolean!
+    utilizationPercentage: Float
+    monthlySalary: Float
+    hourlyRate: Float
+    bonusHourlyRate: Float
+    documentCollectionLink: String
+    isValid: Boolean!
+    notes: String
+    createdAt: String!
+    updatedAt: String!
+    expert: Expert
+    contract: Contracts
 }
 
 type Pricing {
@@ -406,23 +449,45 @@ input TeamExpertsInput {
     assignedAt: String
 }
 
-input CompanyCustomerContractsInput {
-    companyID: Int!
-    contractType: CustomerContractType!
-    startDate: String!
-    endDate: String
-    totalValue: Float!
-    contractURL: String
+input ContractInput {
+    contractNumber: String!
+    contractType: ContractType!
+    title: String!
+    validFrom: String!
+    validTo: String
+    documentLink: String
 }
 
-input CompanyInternalContractsInput {
+input CompanyCustomerContractsInput {
+    contractID: Int!
     companyID: Int!
-    contractName: String!
-    contractType: InternalContractType!
-    startDate: String!
-    endDate: String
+    totalValue: Float!
+}
+
+input CompanySuppliersContractsInput {
+    contractID: Int!
+    companyID: Int!
     monthlyCost: Float!
-    contractURL: String
+}
+
+input ExpertContractInput {
+    expertID: Int!
+    contractID: Int!
+    relationshipType: RelationshipType!
+    startDate: String
+    endDate: String
+    maritalStatus: MaritalStatus
+    hasChildren: Boolean
+    vacationDays: Int
+    remoteAllowed: Boolean = false
+    guaranteedUtilization: Boolean = false
+    utilizationPercentage: Float
+    monthlySalary: Float
+    hourlyRate: Float
+    bonusHourlyRate: Float
+    documentCollectionLink: String
+    isValid: Boolean = true
+    notes: String
 }
 
 input ExpertOrdersInput {
@@ -494,10 +559,14 @@ type Query {
     team(id: Int!): Teams
     teamExperts: [TeamExperts!]!
     teamExpert(teamID: Int!, expertID: Int!): TeamExperts
+    contracts: [Contracts!]!
+    contract(id: Int!): Contracts
     companyCustomerContracts: [CompanyCustomerContracts!]!
     companyCustomerContract(id: Int!): CompanyCustomerContracts
-    companyInternalContracts: [CompanyInternalContracts!]!
-    companyInternalContract(id: Int!): CompanyInternalContracts
+    companySuppliersContracts: [CompanySuppliersContracts!]!
+    companySuppliersContract(id: Int!): CompanySuppliersContracts
+    expertContracts: [ExpertContracts!]!
+    expertContract(id: Int!): ExpertContracts
     expertOrders: [ExpertOrders!]!
     expertOrder(id: Int!): ExpertOrders
     pricing: [Pricing!]!
@@ -513,6 +582,8 @@ type Query {
 }
 
 type Mutation {
+    securedAction(data: String!): String!
+
     createAddress(input: AddressInput!): Address!
     updateAddress(id: Int!, input: AddressInput!): Address!
     deleteAddress(id: Int!): Boolean!
@@ -566,13 +637,21 @@ type Mutation {
     createTeamExperts(input: TeamExpertsInput!): TeamExperts!
     deleteTeamExperts(teamID: Int!, expertID: Int!): Boolean!
 
+    createContract(input: ContractInput!): Contracts!
+    updateContract(id: Int!, input: ContractInput!): Contracts!
+    deleteContract(id: Int!): Boolean!
+
     createCompanyCustomerContracts(input: CompanyCustomerContractsInput!): CompanyCustomerContracts!
     updateCompanyCustomerContracts(id: Int!, input: CompanyCustomerContractsInput!): CompanyCustomerContracts!
     deleteCompanyCustomerContracts(id: Int!): Boolean!
 
-    createCompanyInternalContracts(input: CompanyInternalContractsInput!): CompanyInternalContracts!
-    updateCompanyInternalContracts(id: Int!, input: CompanyInternalContractsInput!): CompanyInternalContracts!
-    deleteCompanyInternalContracts(id: Int!): Boolean!
+    createCompanySuppliersContracts(input: CompanySuppliersContractsInput!): CompanySuppliersContracts!
+    updateCompanySuppliersContracts(id: Int!, input: CompanySuppliersContractsInput!): CompanySuppliersContracts!
+    deleteCompanySuppliersContracts(id: Int!): Boolean!
+
+    createExpertContract(input: ExpertContractInput!): ExpertContracts!
+    updateExpertContract(id: Int!, input: ExpertContractInput!): ExpertContracts!
+    deleteExpertContract(id: Int!): Boolean!
 
     createExpertOrders(input: ExpertOrdersInput!): ExpertOrders!
     updateExpertOrders(id: Int!, input: ExpertOrdersInput!): ExpertOrders!

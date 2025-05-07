@@ -183,33 +183,67 @@ CREATE TABLE TeamExperts
     FOREIGN KEY (ExpertID) REFERENCES Experts (ExpertID)
 );
 
+-- Tabulka pro ukládání obecných informací o smlouvách
+CREATE TABLE Contracts
+(
+    ContractID     SERIAL PRIMARY KEY,
+    ContractNumber VARCHAR(100) UNIQUE,
+    ContractType   VARCHAR(50) CHECK (ContractType IN ('Framework', 'Order', 'Subscription', 'Service', 'Other')),
+    Title          TEXT NOT NULL,
+    ValidFrom      DATE NOT NULL,
+    ValidTo        DATE,
+    DocumentLink   TEXT, -- např. URL k PDF
+    CreatedAt      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Tabulka pro ukládání informací o smlouvách se zákazníky
 CREATE TABLE CompanyCustomerContracts
 (
     CustomerContractID SERIAL PRIMARY KEY,
-    CompanyID          INT  NOT NULL,
-    ContractType       VARCHAR(20) CHECK (ContractType IN ('Framework', 'Order')),
-    StartDate          DATE NOT NULL,
-    EndDate            DATE,
+    ContractID         INT UNIQUE NOT NULL,
+    CompanyID          INT        NOT NULL,
     TotalValue         DECIMAL(15, 2),
-    ContractURL        VARCHAR(2048),
-    CreatedAt          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ContractID) REFERENCES Contracts (ContractID) ON DELETE CASCADE,
     FOREIGN KEY (CompanyID) REFERENCES Companies (CompanyID)
 );
 
 -- Tabulka pro ukládání informací o interních smlouvách (opakující se výdaje)
-CREATE TABLE CompanyInternalContracts
+CREATE TABLE CompanySuppliersContracts
 (
     InternalContractID SERIAL PRIMARY KEY,
-    CompanyID          INT          NOT NULL,
-    ContractName       VARCHAR(255) NOT NULL,
-    ContractType       VARCHAR(50) CHECK (ContractType IN ('Subscription', 'Service', 'Other')),
-    StartDate          DATE         NOT NULL,
-    EndDate            DATE,
+    ContractID         INT UNIQUE NOT NULL,
+    CompanyID          INT        NOT NULL,
     MonthlyCost        DECIMAL(10, 2),
-    ContractURL        VARCHAR(2048),
-    CreatedAt          TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ContractID) REFERENCES Contracts (ContractID) ON DELETE CASCADE,
     FOREIGN KEY (CompanyID) REFERENCES Companies (CompanyID)
+);
+
+-- Tabulka pro smluvní vztahy expertů s provozovatelem platformy
+CREATE TABLE ExpertContracts
+(
+    ExpertContractID       SERIAL PRIMARY KEY,
+    ExpertID               INT         NOT NULL,
+    ContractID             INT         NOT NULL,
+    RelationshipType       VARCHAR(50) NOT NULL CHECK (RelationshipType IN ('HPP', 'DPP', 'ICO', 'SRO')),
+    StartDate              DATE,
+    EndDate                DATE,
+    MaritalStatus          VARCHAR(50) CHECK (MaritalStatus IN ('Single', 'Married', 'Divorced', 'Widowed')),
+    HasChildren            BOOLEAN,
+    VacationDays           INT,
+    RemoteAllowed          BOOLEAN   DEFAULT FALSE,
+    GuaranteedUtilization  BOOLEAN   DEFAULT FALSE,
+    UtilizationPercentage  DECIMAL(5, 2) CHECK (UtilizationPercentage >= 0 AND UtilizationPercentage <= 100),
+    MonthlySalary          DECIMAL(12, 2),
+    HourlyRate             DECIMAL(10, 2),
+    BonusHourlyRate        DECIMAL(10, 2),
+    DocumentCollectionLink TEXT,
+    IsValid                BOOLEAN   DEFAULT TRUE,
+    Notes                  TEXT,
+    CreatedAt              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UpdatedAt              TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (ExpertID) REFERENCES Experts (ExpertID) ON DELETE CASCADE,
+    FOREIGN KEY (ContractID) REFERENCES Contracts (ContractID) ON DELETE CASCADE
 );
 
 -- Tabulka pro ukládání informací o objednávkách expertů v rámci zákaznických smluv
